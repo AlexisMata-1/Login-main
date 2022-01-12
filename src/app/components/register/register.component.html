@@ -1,0 +1,72 @@
+<div class="form-container mat-elevation-z5">
+    
+    <h1>Registrarte</h1>
+
+    <form [formGroup] = "registerfrom">
+        <mat-form-field>
+            <input matInput placeholder="Nombre" formControlName = "name">
+
+            <mat-error *ngIf = "name?.errors?.['required']">
+                El nombre es requerido 
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+            <input matInput placeholder="Apellidos" formControlName = "apellido" >
+
+            <mat-error *ngIf = "apellido?.errors?.['required']">
+                Los apellidos son requerido
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+            <input matInput placeholder="Fecha de Nacimiento" formControlName = "date" type="date" >
+
+            <mat-error *ngIf = "date?.errors?.['required']">
+                La Fecha de Nacimiento es requerido 
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+
+            <input matInput placeholder="Correo Electronico" formControlName = "email" type="email" >
+
+            <mat-error *ngIf = "email?.errors?.['required']">
+                Correo Electronico es requerido 
+            </mat-error>
+
+        </mat-form-field>
+
+        <mat-form-field>
+            <input matInput placeholder="Contraseña" formControlName = "contrasena" type="password" >
+
+            <mat-error *ngIf = "contrasena?.errors?.['required']">
+                Contraseña es requerida 
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+            <input matInput placeholder="Confirmar contraseña" formControlName = "confirmarcontrasena" type="password" >
+
+            <mat-error *ngIf = "confirmarcontrasena?.errors?.['required']">
+                Confirmar contraseña es requerida 
+            </mat-error>
+        </mat-form-field>
+
+        <form [formGroup]="aFormGroup">
+            <ngx-recaptcha2 #captchaElem
+              [siteKey]="siteKey"
+              formControlName="recaptcha">
+            </ngx-recaptcha2>
+        </form>
+
+        <div class="center">
+            <button mat-raised-button color= "primary" type= "submit">
+                Registrar
+            </button>
+        </div>
+
+        
+    </form>
+    
+</div>
