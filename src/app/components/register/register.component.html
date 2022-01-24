@@ -1,59 +1,53 @@
-<div class="form-container mat-elevation-z5">
+
+  
+  <div class="form-container mat-elevation-z5">
     
     <h1>Registrarte</h1>
 
-    <form [formGroup] = "registerfrom">
-        <mat-form-field>
-            <input matInput placeholder="Nombre" formControlName = "name">
-
-            <mat-error *ngIf = "name?.errors?.['required']">
-                El nombre es requerido 
-            </mat-error>
+    <form [formGroup] = "registerform" (submit)="sendRegister()">
+        <mat-form-field appearance="outline">
+            <mat-label>Nombre</mat-label>
+            <input  formControlName = "first_name" matInput/>
+            <mat-error *ngIf="registerform.invalid">{{errorName()}}</mat-error>
         </mat-form-field>
 
-        <mat-form-field>
-            <input matInput placeholder="Apellidos" formControlName = "apellido" >
-
-            <mat-error *ngIf = "apellido?.errors?.['required']">
-                Los apellidos son requerido
-            </mat-error>
-        </mat-form-field>
-
-        <mat-form-field>
-            <input matInput placeholder="Fecha de Nacimiento" formControlName = "date" type="date" >
-
-            <mat-error *ngIf = "date?.errors?.['required']">
-                La Fecha de Nacimiento es requerido 
-            </mat-error>
-        </mat-form-field>
-
-        <mat-form-field>
-
-            <input matInput placeholder="Correo Electronico" formControlName = "email" type="email" >
-
-            <mat-error *ngIf = "email?.errors?.['required']">
-                Correo Electronico es requerido 
-            </mat-error>
+        <mat-form-field appearance="outline">
+            <mat-label>Apellidos</mat-label>
+            <input  formControlName = "last_name" matInput/>
+            <mat-error *ngIf="registerform.invalid">{{errorlastName()}}</mat-error>
 
         </mat-form-field>
 
-        <mat-form-field>
-            <input matInput placeholder="Contraseña" formControlName = "contrasena" type="password" >
+        <mat-form-field appearance="outline">
+            <mat-label>Fecha de Nacimiento</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="date">
+            <mat-error *ngIf="registerform.invalid">{{errorDate()}}</mat-error>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+          
 
-            <mat-error *ngIf = "contrasena?.errors?.['required']">
-                Contraseña es requerida 
-            </mat-error>
+        <mat-form-field appearance="outline">
+            <mat-label>Correo Electrónico</mat-label>
+            <input  formControlName = "email" type="email" matInput/>
+            <mat-error *ngIf="registerform.invalid">{{errorEmail()}}</mat-error>
+
         </mat-form-field>
 
-        <mat-form-field>
-            <input matInput placeholder="Confirmar contraseña" formControlName = "confirmarcontrasena" type="password" >
 
-            <mat-error *ngIf = "confirmarcontrasena?.errors?.['required']">
-                Confirmar contraseña es requerida 
-            </mat-error>
+        <mat-form-field appearance="outline">
+            <mat-label>Contraseña</mat-label>
+            <input  formControlName = "contrasena" type="password" matInput/>
+            <mat-error *ngIf="registerform.invalid">{{errorPass()}}</mat-error>
         </mat-form-field>
 
-        <form [formGroup]="aFormGroup">
+        <mat-form-field appearance="outline">
+            <mat-label>Confirmar Contraseña</mat-label>
+            <input  formControlName = "confirmarcontrasena" type="password" matInput/>
+            <mat-error *ngIf="registerform.invalid">{{errorConfPass()}}</mat-error>
+        </mat-form-field>
+
+        <form [formGroup]="registerform">
             <ngx-recaptcha2 #captchaElem
               [siteKey]="siteKey"
               formControlName="recaptcha">
@@ -61,7 +55,7 @@
         </form>
 
         <div class="center">
-            <button mat-raised-button color= "primary" type= "submit">
+            <button mat-raised-button color= "primary" type= "submit" [disabled]="registerform.invalid" > 
                 Registrar
             </button>
         </div>

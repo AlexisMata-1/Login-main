@@ -1,52 +1,43 @@
+<h1>Reportes diarios de desayunos</h1>
+
+
+<form [formGroup] = "consultForm" (submit)="ConsultarRegistro()">
 <mat-form-field class="float" appearance="fill">
-    <mat-label>Selecciona una fecha</mat-label>
-    <input matInput [matDatepicker]="picker">
-    <mat-datepicker-toggle matSuffix [for]="picker">
-        <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
-    </mat-datepicker-toggle>
-    <mat-datepicker #picker></mat-datepicker>
+  <mat-label>Selecciona una fecha</mat-label>
+  <input matInput [matDatepicker]="picker" formControlName = "dia" type="text">
+  <mat-datepicker-toggle matSuffix [for]="picker">
+    <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+  </mat-datepicker-toggle>
+  <mat-datepicker #picker></mat-datepicker>
 </mat-form-field>
 
+
 <div class="float">
-    <button mat-raised-button color="primary">Primary</button>
+  <button mat-raised-button color="primary" type="submit" [disabled]="consultForm.invalid"> Consultar</button>
+</div>
+</form>
+
+<table>
+  <tr>
+    <th>Usuario Registrado</th>
+    <th>Asistencia confirmada</th>
+    <th></th>
+    <th></th>
+  </tr> 
+  <th *ngIf="registerDb.length == 0">No hay usuarios registrados en este día</th>
+  <tr *ngFor="let user of registerDb">
+   
+    <th>{{user.first_name}} {{user.last_name}}</th> 
+    <th>{{user.confirmed_assist}}</th>
+</tr>
+
+</table>
+
+
+
+<div class="button">
+  <button mat-raised-button routerLink="/calendar" color="primary" type="submit">
+    Salir
+  </button>
 </div>
 
-
-<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-
-    <!--- Note that these columns can be defined in any order.
-          The actual rendered columns are set as a property on the row definition" -->
-  
-    <!-- Position Column -->
-    <ng-container matColumnDef="position">
-      <th mat-header-cell *matHeaderCellDef> No. </th>
-      <td mat-cell *matCellDef="let element"> {{element.position}} </td>
-    </ng-container>
-  
-    <!-- Name Column -->
-    <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef> Name </th>
-      <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-    </ng-container>
-  
-    <!-- Weight Column -->
-    <ng-container matColumnDef="weight">
-      <th mat-header-cell *matHeaderCellDef> Weight </th>
-      <td mat-cell *matCellDef="let element"> {{element.weight}} </td>
-    </ng-container>
-  
-    <!-- Symbol Column -->
-    <ng-container matColumnDef="symbol">
-      <th mat-header-cell *matHeaderCellDef> Symbol </th>
-      <td mat-cell *matCellDef="let element"> {{element.symbol}} </td>
-    </ng-container>
-  
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  </table>
-  
-  <div class="button">
-    <button mat-raised-button routerLink="/calendar" color="primary" type="submit">
-        Salir
-    </button>
-</div>

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { localStorageService } from './shared/localstorage.service';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +7,21 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'Ejemplo';
+  title = 'Registros de Desayunos';
+
+constructor(private localS:localStorageService){
+
+}
+
+
+ usuario = JSON.parse(this.localS.getLoc('usuario'))
+
+isActive(){
+  if(this.usuario!=null){
+    return false
+  }else{
+    return true
+  }
+}
+
 }

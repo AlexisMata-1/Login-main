@@ -1,5 +1,9 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
+
 
 @Component({
   selector: 'app-register',
@@ -8,53 +12,125 @@ import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms'
 })
 export class RegisterComponent implements OnInit {
 
-  
 
- aFormGroup: FormGroup;
-  
 
-  constructor(private formBuilder: FormBuilder) {}
+  registerform: FormGroup;
+
+
+  constructor(private formBuilder: FormBuilder,
+    private http: HttpClient,
+    private router: Router) { }
+
+    ///////////instancia para llamar a la direccion de la API
+    private apiUrl= environment.apiUrl;
+
 
   ngOnInit() {
-    this.aFormGroup = this.formBuilder.group({
-      recaptcha: ['', Validators.required]
+
+
+
+    this.registerform = this.formBuilder.group({
+      recaptcha: ['', Validators.required],
+      first_name: new FormControl  ('',{
+        validators: [Validators.required,Validators.minLength(3)]}),
+      last_name: new FormControl('', [Validators.required]),
+      date: new FormControl('', [Validators.required]),
+      email: new FormControl('', [Validators.required, Validators.email]),
+      contrasena: new FormControl ('',{
+        validators: [Validators.required,Validators.minLength(9)]}),
+      confirmarcontrasena: new FormControl ('',{
+        validators: [Validators.required,Validators.minLength(9)]}),
     });
-    
+
   }
 
-  registerfrom = new FormGroup({
-    name: new FormControl('', [Validators.required]),
-    apellido: new FormControl('', [Validators.required]),
-    date: new FormControl('',[Validators.required]),
-    email: new FormControl('', [Validators.required, Validators.email]),
-    contrasena: new FormControl('', [Validators.required]),
-    confirmarcontrasena: new FormControl('',[Validators.required]),
-  });
+  sendRegister(): any {
+
+    let userData = {
+      id_user_type: 2,
+      first_name: this.registerform.value.first_name,
+      last_name: this.registerform.value.last_name,
+      dob: this.registerform.value.date,
+      email: this.registerform.value.email,
+      pass: this.registerform.value.contrasena,
+      is_active: true
+    }
+    this.http.post(this.apiUrl + '/Users', userData).subscribe(res => {
+
+      console.log(res)
+      if (res == "204") {
+
+        console.log(userData)
+        this.router.navigate(['/login']);
+
+      }else{
+        console.log(res)
+      }
+
+
+
+    })
+
+  }
+
 
   siteKey: string = "6LfG5OYdAAAAAL5ZPrG5LwS-nYlfYEtmETRgcAgO";
 
-  get email(){
-    return this.registerfrom.get('email');
+
+
+  errorName() {
+    var campo = this.registerform.get('first_name');
+    if (campo?.hasError('required')) {
+      return ' El  nombre es requerido'
+    }
+    if (campo?.hasError('minlength')) {
+      return 'Longitud mínima de 3 caracteres'
+    }
+    return '';
   }
 
-  get contrasena(){
-    return this.registerfrom.get('contrasena');
+
+  errorlastName() {
+    var campo = this.registerform.get('last_name');
+    if (campo?.hasError('required')) {
+      return ' El apellido es requerido'
+    }
+    return '';
   }
 
-  get apellido(){
-    return this.registerfrom.get('contrasena');
-  }
- 
-
-  get date(){
-    return this.registerfrom.get('contrasena');
-  }
-
-  get confirmarcontrasena(){
-    return this.registerfrom.get('contrasena');
+  errorDate() {
+    var campo = this.registerform.get('date');
+    if (campo?.hasError('required')) {
+      return ' Fecha de Nacimiento requerida'
+    }
+    return '';
   }
 
-  get name(){
-    return this.registerfrom.get('contrasena');
+  errorEmail() {
+    var campo = this.registerform.get('email');
+    if (campo?.hasError('required')) {
+      return ' El correo es requerido'
+    }
+    return '';
+  }
+
+  errorPass() {
+    var campo = this.registerform.get('contrasena');
+    if (campo?.hasError('required')) {
+      return 'La Contraseña es requerida'
+    }
+    if (campo?.hasError('minlength')) {
+      return 'La contraseña debe contener minimo 9 caracteres'
+    }
+
+    return '';
+  }
+
+  errorConfPass() {
+    var campo = this.registerform.get('confirmarcontrasena');
+    if (campo?.hasError('required')) {
+      return 'Confirmar Contraseña'
+    }
+    return '';
   }
 }

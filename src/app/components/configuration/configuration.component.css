@@ -1,3 +1,113 @@
+*{
+    box-sizing: border-box;
+    margin-left: 2%;
+  }
+  
+  
+  div{
+   
+    padding: 20px;
+    margin-left: 10px;
+    margin-right: auto;
+    margin-top: 10px;
+  
+  }
+  
+  .header{
+    background-color: gray;
+    width: 95%;
+    height: 50px;
+  }
+  
+  .dia{
+    background-color: rgb(209, 209, 209);
+    position: relative;
+    width: 280px;
+    height: 500px;
+    text-align: center;
+    border: 5px solid rgb(68, 64, 64);
+    border-radius: 20px;
+    box-shadow:  5px 5px 10px rgb(174, 89, 89);
+    min-height: 300px;
+    float: left;
+    padding: 0;
+    overflow: hidden;
+    
+  }
+  
+  .dia:hover{
+    color: rgb(0, 31, 123);
+    box-shadow:  5px 5px 10px rgb(223, 7, 7),5px 5px 10px rgb(223, 7, 7);
+    
+  }
+  
+  table{
+    width: 60%;
+    background-color: rgba(209, 209, 209, 0.885);
+  
+    border-collapse: collapse;
+    border-radius: 20px;
+    overflow: scroll;
+    border: rgb(148, 0, 0);
+  }
+  
+  
+  th,td{
+    padding: 15px;
+  }
+  
+  .tablainterna{
+    overflow: scroll;
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    height: 200px;
+  
+  
+  }
+  .tablainterna::-webkit-scrollbar {
+    display: none;
+    }
+  
+  .botonesContenedor{
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    padding: 0;
+    margin-left: 20px;
+  
+  }
+  .tituloLista{
+    background-color: #dddddd;
+    border-bottom: 1px solid black;
+    padding: 15px;
+    border-radius: 20px;
+    font-size: 1em;
+    
+  }
+  
+  button{
+    margin: 10px;
+    display: inline-block;
+    
+  }
+  .buttons{
+    display: block;
+    width: 100%;
+  
+  }
+
 .button{
     margin: 10px;
+}
+
+table.mat-table {
+    border-spacing: 0;
+    width: 70%;
+}
+
+ .mat-form-field {
+    width: 70%;
+    height: 100px;
 }
