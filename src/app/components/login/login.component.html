@@ -3,7 +3,7 @@
     
     <h1>Login</h1>
 
-    <form [formGroup] = "loginForm">
+    <form [formGroup] = "loginForm" (ngSubmit)="onSubmit(loginForm.value)">
         <mat-form-field>
 
             <input matInput placeholder="Correo Electronico" formControlName = "email" type="email">
@@ -20,9 +20,9 @@
 
         <mat-form-field>
 
-            <input matInput placeholder="Contraseña" formControlName = "contrasena" type="password">
+            <input matInput placeholder="Contraseña" formControlName = "pass" type="password">
 
-            <mat-error *ngIf = "contrasena?.errors?.['required']">
+            <mat-error *ngIf = "pass?.errors?.['required']">
                 Contraseña es requerida 
             </mat-error>
 

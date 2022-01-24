@@ -1,12 +1,154 @@
-<p-fullCalendar [events]="events" [options]="options"></p-fullCalendar>
+<body>
+    <!----------------------------------------LUNES--------------------------------------------------->
+    <div class="dia">
+        <h1>{{ (sumarDias(d,1))| date:"dd-MMMM-yyyy" | uppercase}} </h1>
+        <h1 >{{traerDias(dia1.getDay())}}</h1>
+        <p class="tituloLista"><strong> Usuarios Registrados</strong></p>
+        <div class="tablainterna">
+            <table>
+                <tr *ngIf="listUsuarios.length==0">No hay usuarios para mostrar</tr>
+                <tr *ngFor="let user of listUsuarios">
+                    <td>{{user.first_name }} {{user.last_name}}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="botonesContenedor">
+            <button mat-raised-button [disabled]="obtenerFecha(dia1) " (click)="Registro1()" color="primary" type="submit">
+                Registrar
+            </button>
+            <button mat-raised-button [disabled]="obtenerFecha(dia1)" (click)="Eliminar1()" color="primary" type="submit">
+                Eliminar
+            </button>
+        </div>
+    </div>
+    <!----------------------------------------MARTES--------------------------------------------------->
+    <div class="dia">
+        <h1>{{ (sumarDias(d,1))| date:"dd-MMMM-yyyy" | uppercase}} </h1>
+        <h1 >{{traerDias(dia2.getDay())}}</h1>
+        <p class="tituloLista"><strong> Usuarios Registrados</strong></p>
+        <div class="tablainterna">
+            <table>
+                <tr *ngIf="listUsuarios2.length==0">No hay usuarios para mostrar</tr>
+                <tr *ngFor="let user of listUsuarios2">
+                    <td>{{user.first_name }}  {{user.last_name}}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="botonesContenedor">
+            <button mat-raised-button  [disabled]="obtenerFecha(dia2)" (click)="Registro2()" color="primary" type="submit">
+                Registrar
+            </button>
+            <button mat-raised-button  [disabled]="obtenerFecha(dia2)" (click)="Eliminar2()" color="primary" type="submit">
+                Eliminar
+            </button>
+        </div>
+    </div>
+    <!----------------------------------------MIERCOLES--------------------------------------------------->
 
-<div class="button">
-    <button mat-raised-button routerLink="/reports" color="primary">
-        Reportes
-    </button>
-</div>
-<div class="button">
-    <button mat-raised-button routerLink="/configuration" color="primary" type="submit">
-        Configuration
-    </button>
-</div>
+    <div class="dia">
+        <h1>{{(sumarDias(d,1))| date:"dd-MMMM-yyyy" | uppercase}} </h1>
+        <h1 >{{traerDias(dia3.getDay())}}</h1>
+
+        <p class="tituloLista"><strong> Usuarios Registrados</strong></p>
+        <div class="tablainterna">
+            <table>
+                <tr *ngIf="listUsuarios3.length==0">No hay usuarios para mostrar</tr>
+
+                <tr *ngFor="let user of listUsuarios3">
+                    <td>{{user.first_name }} {{user.last_name}}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="botonesContenedor">
+            <button mat-raised-button  [disabled]="obtenerFecha(dia3)" (click)="Registro3()" color="primary" type="submit">
+                Registrar
+            </button>
+            <button mat-raised-button  [disabled]="obtenerFecha(dia3)" (click)="Eliminar3()" color="primary" type="submit">
+                Eliminar
+            </button>
+        </div>
+    </div>
+    <!----------------------------------------JUEVES--------------------------------------------------->
+
+    <div class="dia">
+        <h1>{{(sumarDias(d,1))| date:"dd-MMMM-yyyy" | uppercase}} </h1>
+        <h1 >{{traerDias(dia4.getDay())}}</h1>
+
+        <p class="tituloLista"><strong> Usuarios Registrados</strong></p>
+        <div class="tablainterna">
+            <table>
+                <tr *ngIf="listUsuarios4.length==0">No hay usuarios para mostrar</tr>
+
+                <tr *ngFor="let user of listUsuarios4">
+                    <td>{{user.first_name }} {{user.last_name}}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="botonesContenedor">
+            <button mat-raised-button  [disabled]="obtenerFecha(dia4)" (click)="Registro4()" color="primary" type="submit">
+                Registrar
+            </button>
+            <button mat-raised-button  [disabled]="obtenerFecha(dia4)" (click)="Eliminar4()" color="primary" type="submit">
+                Eliminar
+            </button>
+        </div>
+    </div>
+    <!----------------------------------------VIENRES--------------------------------------------------->
+    <div class="dia">
+        <h1>{{(sumarDias(d,1))| date:"dd-MMMM-yyyy" | uppercase}} </h1>
+        <h1 >{{traerDias(dia5.getDay())}}</h1>
+
+        <p class="tituloLista"><strong> Usuarios Registrados</strong></p>
+        <div class="tablainterna">
+            <table>
+                <tr *ngIf="listUsuarios5.length==0">No hay usuarios para mostrar</tr>
+
+                <tr *ngFor="let user of listUsuarios5">
+                    <td>{{user.first_name }} {{user.last_name}}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="botonesContenedor">
+            <button mat-raised-button  [disabled]="obtenerFecha(dia5)"  (click)="Registro5()" color="primary" type="submit">
+                Registrar
+            </button>
+            <button mat-raised-button  [disabled]="obtenerFecha(dia5)"  (click)="Eliminar5()" color="primary" type="submit">
+                Eliminar
+            </button>
+        </div>
+    </div>
+    <!----------------------------------------SABADO--------------------------------------------------->
+
+    <div class="dia">
+        <h1>{{(sumarDias(d,1))| date:"dd-MMMM-yyyy" | uppercase}} </h1>
+        <h1 >{{traerDias(dia6.getDay())}}</h1>
+
+        <p class="tituloLista"><strong> Usuarios Registrados</strong></p>
+        <div class="tablainterna">
+            <table>
+                <tr *ngIf="listUsuarios6.length==0">No hay usuarios para mostrar</tr>
+
+                <tr *ngFor="let user of listUsuarios6">
+                    <td>{{user.first_name }} {{user.last_name}}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="botonesContenedor">
+            <button mat-raised-button  [disabled]="obtenerFecha(dia6)" (click)="Registro6()" color="primary" type="submit">
+                Registrar
+            </button>
+            <button mat-raised-button  [disabled]="obtenerFecha(dia6)" (click)="Eliminar6()" color="primary" type="submit">
+                Eliminar
+            </button>
+        </div>
+    </div>
+    <!----------------------------------------BOTONES DE ADMIN--------------------------------------------------->  
+ <div class="buttons">
+        <button mat-raised-button *ngIf="!isUser()" routerLink="/configuration" color="primary" type="submit">
+            Configuración
+        </button>
+        <button mat-raised-button *ngIf="!isUser()" routerLink="/reports" color="primary" type="submit">
+            Reportes
+        </button>
+    </div>
+</body> 

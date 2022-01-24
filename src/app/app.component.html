@@ -1,9 +1,13 @@
 
 <mat-toolbar color= "primary">
-  Iniciar Sesion
-  <button mat-button routerLink = "login">
+  <button mat-button routerLink = "login" [disabled]="isActive()" >
     <mat-icon>login</mat-icon>
     Login
+  </button>
+
+  <button mat-button routerLink = "login" [disabled]="isActive()">
+    <mat-icon>login</mat-icon>
+    Logout
   </button>
 </mat-toolbar>
 

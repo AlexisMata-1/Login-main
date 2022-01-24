@@ -7,13 +7,15 @@ import { LandingComponent } from './components/landing/landing.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { ReportsComponent } from './components/reports/reports.component';
+import { VigilantGuard } from './vigilant.guard';
+import { Vigilant2Guard } from './vigilant2.guard';
 
 
 const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    component: LandingComponent
+    component: LoginComponent
   },
 
 
@@ -28,15 +30,18 @@ const routes: Routes = [
   },
   {
     path: 'calendar',
-    component: CalendarComponent
+    component: CalendarComponent,
+    canActivate:[Vigilant2Guard]
   },
   {
     path: 'reports',
-    component: ReportsComponent
+    component: ReportsComponent,
+    canActivate: [Vigilant2Guard ,VigilantGuard ]
   },
   {
     path: 'configuration',
-    component: ConfigurationComponent
+    component: ConfigurationComponent,
+    canActivate: [Vigilant2Guard ,VigilantGuard ]
   }
 
 ];

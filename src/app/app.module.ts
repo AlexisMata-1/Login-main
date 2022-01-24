@@ -23,6 +23,11 @@ import { MatNativeDateModule } from '@angular/material/core';
 import {MatTableModule} from '@angular/material/table';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatChipsModule} from '@angular/material/chips';
+import {MatCardModule} from '@angular/material/card';
+import {MatSelectModule} from '@angular/material/select';
+import { HttpClientModule } from '@angular/common/http';
+import { CookieService } from 'ngx-cookie-service';
+import { localStorageService } from '.././app/shared/localstorage.service'
 
 
 
@@ -35,8 +40,8 @@ import {MatChipsModule} from '@angular/material/chips';
     RegisterComponent,
     CalendarComponent,
     ConfigurationComponent,
-    ReportsComponent
-  ],
+    ReportsComponent,
+ ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -54,10 +59,16 @@ import {MatChipsModule} from '@angular/material/chips';
     MatNativeDateModule,
     MatTableModule,
     MatTabsModule,
-    MatChipsModule
+    MatChipsModule,
+    MatCardModule,
+    MatSelectModule,
+    HttpClientModule,
+
+    
 
   ],
-  providers: [],
+  providers: [CookieService,
+    localStorageService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

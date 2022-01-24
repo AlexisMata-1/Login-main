@@ -1,31 +1,27 @@
 import { Component, OnInit } from '@angular/core';
-import {COMMA, ENTER} from '@angular/cdk/keycodes';
-import {MatChipInputEvent} from '@angular/material/chips';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { MatChipInputEvent } from '@angular/material/chips';
+import { HttpClient } from '@angular/common/http';
+import { FormControl, Validators } from '@angular/forms';
+import { environment } from 'src/environments/environment';
 
 export interface Fruit {
   name: string;
 }
 
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
+interface UserType {
+  value: number;
+  viewValue: string;
+}
+interface IsActive {
+  value: number;
+  viewValue: string;
 }
 
-const ELEMENT_DATA: PeriodicElement[] = [
-  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-  {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-  {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-  {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-  {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-  {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-  {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-  {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-  {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-  {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-];
-
+export interface PeriodicElement {
+  name: string;
+  email: string;
+}
 
 @Component({
   selector: 'app-configuration',
@@ -34,19 +30,40 @@ const ELEMENT_DATA: PeriodicElement[] = [
 })
 export class ConfigurationComponent implements OnInit {
 
+    
+    ///////////instancia para llamar a la direccion de la API
+    private apiUrl= environment.apiUrl;
 
+  email = new FormControl('', [Validators.required, Validators.email]);
+
+  getErrorMessage() {
+    if (this.email.hasError('required')) {
+      return 'You must enter a value';
+    }
+
+    return this.email.hasError('email') ? 'Not a valid email' : '';
+  }
+
+  userType: UserType[] = [
+    { value: 1, viewValue: 'Administrador' },
+    { value: 2, viewValue: 'Colaborador' },
+  ];
+
+  activo: IsActive[] = [
+    { value: 1, viewValue: 'Activo' },
+    { value: 0, viewValue: 'Inactivo' },
+  ];
   addOnBlur = true;
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
-  fruits: Fruit[] = [{name: 'Lemon'}, {name: 'Lime'}, {name: 'Apple'}];
+  fruits: Fruit[] = [{ name: 'arkus.com' }, { name: 'arkus-solutions.com' }, { name: 'arkusnexus.com' }];
 
   add(event: MatChipInputEvent): void {
     const value = (event.value || '').trim();
 
     // Add our fruit
     if (value) {
-      this.fruits.push({name: value});
+      this.fruits.push({ name: value });
     }
-
     // Clear the input value
     event.chipInput!.clear();
   }
@@ -58,13 +75,18 @@ export class ConfigurationComponent implements OnInit {
       this.fruits.splice(index, 1);
     }
   }
-  
+
   displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-  dataSource = ELEMENT_DATA;
-  
-  constructor() { }
+
+  usersInDb: any = [];
+
+  constructor(private http: HttpClient) { }
 
   ngOnInit(): void {
+    this.http.get(this.apiUrl+'/Users').subscribe(res => {
+      this.usersInDb = res;
+    })
+
   }
 
 }

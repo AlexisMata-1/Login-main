@@ -1,5 +1,6 @@
 mat-toolbar{
-    justify-content: space-between;
+    justify-content: end;
+
 }
 
 .content{
