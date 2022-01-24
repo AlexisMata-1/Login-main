@@ -2,7 +2,6 @@
 <mat-tab-group dynamicWeigth>
     <mat-tab label="Correos">
 
-        <label>Correos aceptados</label>
         <div>
             <mat-form-field class="example-chip-list" appearance="fill">
                 <mat-label>Dominios Aceptados</mat-label>
@@ -31,44 +30,104 @@
     <mat-tab label="Usuarios">
         <br>
 
+        <form [formGroup]="editForm" (ngSubmit)="onSubmit(editForm.value)">
+            <table>
+                <tr>
+                    <th>Editar usuario</th>
+                </tr>
+                <tr>
+                    <th>usuario</th>
+                    <th>correo</th>
+                    <th>tipo de usuario</th>
+                    <th>activo</th>
+                    <th></th>
 
-      
-<table>
-    <tr>
-      <th>Usuario</th>
-      <th>Correo</th>
-      <th>Tipo de Usuario</th>
-      <th>Activo</th>
-    </tr> 
-    <tr *ngFor="let user of usersInDb">
-     
-      <th>{{user.first_name}} {{user.last_name}}</th> 
-      <th>{{user.email}}</th>
-      <th>{{user.is_active}} </th>
-      
-      <th>  <mat-form-field appearance="fill">
-        <mat-label>Select</mat-label>
-        <mat-select >
-          <mat-option *ngFor="let types of usersInDb ">{{user.is_active}}</mat-option>
-        </mat-select>
-      </mat-form-field></th>
-      <th><button mat-raised-button  color="primary" type="submit">
-        Editar
-    </button></th>
-      <th> <button mat-raised-button [disabled]="true" color="primary" type="submit">
-        Guardar
-    </button></th>
-  </tr>
-  
-  </table>
-    
+                </tr>
+
+                <tr>
+                    <th>
+                        <mat-form-field appearance="outline">
+                            <input matInput [disabled]="true" formControlName="nombreE">
+                        </mat-form-field>
+                    </th>
+                    <th>
+                        <mat-form-field appearance="outline" >
+                            <input matInput [disabled]="true" formControlName="emailE">
+                        </mat-form-field>
+                    </th>
+                    <th>
+                        <mat-form-field appearance="outline">
+                            <input matInput placeholder="Correo Electronico"  type="typeE">
+
+                            <mat-error *ngIf="email2?.errors?.['required']">
+                                Correo Electronico es requerido
+                            </mat-error>
+
+                            <mat-error *ngIf="email?.errors?.['email']">
+                                Por favor escribar un formato de Correo Electronico
+                            </mat-error>
+
+                        </mat-form-field>
+                    </th>
+                    <th>
+                        <mat-form-field appearance="outline">
+
+                            <input matInput placeholder="Contraseña" formControlName="activeE">
+
+                            <mat-error *ngIf="pass?.errors?.['required']">
+                                Contraseña es requerida
+                            </mat-error>
+
+                        </mat-form-field>
+                    </th>
+                    <th>
+                        <div class="center">
+                            <button mat-raised-button color="primary" type="submit">
+                                Guardar
+                            </button>
+                        </div>
+                    </th>
+
+
+                </tr>
+
+            </table>
+
+
+        </form>
+
+
+
+        <br>
+        <table>
+            <tr>
+                <th>Usuario</th>
+                <th>Correo</th>
+                <th>Tipo de Usuario</th>
+                <th>Activo</th>
+            </tr>
+            <tr *ngFor="let user of usersInDb">
+
+                <th>{{user.first_name}} {{user.last_name}}</th>
+                <th>{{user.email}}</th>
+                <th>{{user.id_user_type}}</th>
+                <th>{{user.is_active}} </th>
+
+                <th><button (click)="editarUsuario(user)" mat-raised-button color="primary" type="submit">
+                        Editar
+                    </button></th>
+
+            </tr>
+
+        </table>
+
         <div class="button">
             <button mat-raised-button routerLink="/calendar" color="primary" type="submit">
                 Guardar
             </button>
         </div>
-        
-        
+
+
     </mat-tab>
 </mat-tab-group>
 

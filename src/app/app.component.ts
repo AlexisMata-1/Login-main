@@ -18,10 +18,20 @@ constructor(private localS:localStorageService){
 
 isActive(){
   if(this.usuario!=null){
-    return false
-  }else{
     return true
   }
+}
+
+
+isLogout(){
+  if (this.usuario==null){
+    return true
+  }
+}
+
+
+LogOut(){
+  this.localS.clear();
 }
 
 }
