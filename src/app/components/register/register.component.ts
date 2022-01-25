@@ -47,7 +47,7 @@ export class RegisterComponent implements OnInit {
   sendRegister(): any {
 
     let userData = {
-      id_user_type: 2,
+      id_user_type: 3,
       first_name: this.registerform.value.first_name,
       last_name: this.registerform.value.last_name,
       dob: this.registerform.value.date,
@@ -57,10 +57,11 @@ export class RegisterComponent implements OnInit {
     }
     this.http.post(this.apiUrl + '/Users', userData).subscribe(res => {
 
-      console.log(res)
-      if (res == "204") {
+      const respuesta=JSON.stringify(res) 
+      if (respuesta.length>30) {
 
-        console.log(userData)
+        console.log(res)
+        console.log('Usuarios Registrado exitosamente')
         this.router.navigate(['/login']);
 
       }else{
