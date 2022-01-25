@@ -17,26 +17,11 @@ export interface Fruit {
 })
 export class ConfigurationComponent implements OnInit {
 
-idList:number | undefined;
+  idList: number | undefined;
 
-  loginForm = new FormGroup({
-    email: new FormControl('', [Validators.required, Validators.email]),
-    pass: new FormControl('', [Validators.required]),
-  });
-
-    
-    ///////////instancia para llamar a la direccion de la API
-    private apiUrl= environment.apiUrl;
-
-  email = new FormControl('', [Validators.required, Validators.email]);
-
-  getErrorMessage() {
-    if (this.email.hasError('required')) {
-      return 'You must enter a value';
-    }
-
-    return this.email.hasError('email') ? 'Not a valid email' : '';
-  }
+ 
+  ///////////instancia para llamar a la direccion de la API
+  private apiUrl = environment.apiUrl;
 
 
   addOnBlur = true;
@@ -64,67 +49,91 @@ idList:number | undefined;
 
 
   usersInDb: any = [];
-
+  
+//FORMGROUP DEL FORMULARIO DE EDITAR USUARIO
   editForm = new FormGroup({
-    nombreE: new FormControl('', [Validators.required, Validators.email]),
-    emailE: new FormControl('', [Validators.required]),
-    typeE: new FormControl('', [Validators.required]),
-    activeE: new FormControl('', [Validators.required]),
+    id_user:new FormControl(''),
+    first_name: new FormControl('', [Validators.required]),
+    last_name:new FormControl(''),
+    dob:new FormControl(''),
+    email: new FormControl('', [Validators.required]),
+    id_user_type: new FormControl('', [Validators.required]),
+    is_active: new FormControl('', [Validators.required]),
   });
 
   constructor(private http: HttpClient) { }
 
   ngOnInit(): void {
     //uso del get para traer los usuarios registrados en la base de dtaos mediante un select, al cargar la pagina
-    this.http.get(this.apiUrl+'/Users').subscribe(res => {
+    this.http.get(this.apiUrl + '/Users').subscribe(res => {
       this.usersInDb = res;
     })
 
   }
 
-  editarUsuario(usersInDb:any){
-this.idList=usersInDb.id_user;
-console.log('users in db'+ JSON.parse(usersInDb.first_name))
 
-this.loginForm.patchValue({
-  nombreE: usersInDb.first_name,
-  emailE: usersInDb.email,
-  typeE: usersInDb.id_user_type,
-  activeE: usersInDb.is_active
-})
+  //ACCION DEL BOTON DE EDITAR A LADO DE CADA USUARIOS
+  editarUsuario(form: any) {
+    this.idList = form.id_user;
+    const userEdit = form;
+    console.log(userEdit)
+//ASIGNA LOS VALORES DEL USUARIO AL FORMULARIO DE EDITAR Y GUARDA LOS DEMÁS DATOS DEL USUARIO
+    this.editForm.patchValue({
+      id_user:userEdit.id_user,
+      first_name: userEdit.first_name,
+      last_name: userEdit.last_name,
+      dob:userEdit.dob,
+      email: userEdit.email,
+      id_user_type:userEdit.id_user_type,
+      is_active:userEdit.is_active
+    })
+console.log(this.editForm)
 
-}
-
-
-  onSubmit(form: any) {
-
-    console.log(form);
-
-    try {
-
-
-      this.http.post(this.apiUrl+'/Login', form).subscribe(res => {
-
-        if (res == null) {
-
-          console.log('Usuario o contraseña incorrectos')
-
-        } else {
+  }
 
 
-        } 
-      })
+//ACCION DEL BOTON DE GUARDAR DEL FORMULARIO DE EDITAR
+  guardarCambios(editForm: any) {
 
-    } catch (error) {
-      console.log(error)
+    const usuarioEd=editForm;
+    console.log(usuarioEd);
+        try {
+          this.http.put((this.apiUrl + '/Users/' + usuarioEd.id_user), editForm).subscribe(res => {
+
+            if (res == null) {
+
+              console.log('No se pudo cambiar la info')
+
+            } else {
+
+              console.log(res)
+              this.editForm.reset();
+              this.http.get(this.apiUrl + '/Users').subscribe(res => {
+                this.usersInDb = res;
+              })
+            }
+          })
+
+        } catch (error) {
+          console.log(error)
+        }
+  }
+  
+
+  userTypeError() {
+    var campo = this.editForm.get('id_user_type');
+    if (campo?.hasError('required')) {
+      return 'Asignar un valor'
     }
-  }
-  get email2() {
-    return this.loginForm.get('email');
+    return '';
   }
 
-  get pass() {
-    return this.loginForm.get('pass');
+  isActiveError() {
+    var campo = this.editForm.get('is_active');
+    if (campo?.hasError('required')) {
+      return 'Asignar un valor'
+    }
+    return '';
   }
 
 

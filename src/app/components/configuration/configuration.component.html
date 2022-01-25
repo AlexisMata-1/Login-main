@@ -1,3 +1,8 @@
+<div class="buttonS">
+    <button mat-raised-button routerLink="/calendar" color="warn" type="submit">
+        Salir
+    </button>
+</div>
 <h1>Panel de configuración para Administradores</h1>
 <mat-tab-group dynamicWeigth>
     <mat-tab label="Correos">
@@ -30,54 +35,44 @@
     <mat-tab label="Usuarios">
         <br>
 
-        <form [formGroup]="editForm" (ngSubmit)="onSubmit(editForm.value)">
+        <form [formGroup]="editForm" (ngSubmit)="guardarCambios(editForm.value)">
             <table>
                 <tr>
                     <th>Editar usuario</th>
                 </tr>
                 <tr>
-                    <th>usuario</th>
-                    <th>correo</th>
-                    <th>tipo de usuario</th>
-                    <th>activo</th>
+                    <th>Usuario</th>
+                    <th>Correo</th>
+                    <th>Tipo de usuario</th>
+                    <th>Activo</th>
                     <th></th>
 
                 </tr>
 
                 <tr>
                     <th>
-                        <mat-form-field appearance="outline">
-                            <input matInput [disabled]="true" formControlName="nombreE">
+                        <mat-form-field appearance="outline" >
+                            <input matInput formControlName="first_name" >
                         </mat-form-field>
                     </th>
+
                     <th>
                         <mat-form-field appearance="outline" >
-                            <input matInput [disabled]="true" formControlName="emailE">
+                            <input matInput formControlName="email"  [disabled]="false">
                         </mat-form-field>
                     </th>
+
                     <th>
                         <mat-form-field appearance="outline">
-                            <input matInput placeholder="Correo Electronico"  type="typeE">
-
-                            <mat-error *ngIf="email2?.errors?.['required']">
-                                Correo Electronico es requerido
-                            </mat-error>
-
-                            <mat-error *ngIf="email?.errors?.['email']">
-                                Por favor escribar un formato de Correo Electronico
-                            </mat-error>
-
+                            <input matInput formControlName="id_user_type">
+                            <mat-error *ngIf="editForm.invalid">{{userTypeError()}}</mat-error>
                         </mat-form-field>
                     </th>
+
                     <th>
                         <mat-form-field appearance="outline">
-
-                            <input matInput placeholder="Contraseña" formControlName="activeE">
-
-                            <mat-error *ngIf="pass?.errors?.['required']">
-                                Contraseña es requerida
-                            </mat-error>
-
+                            <input matInput formControlName="is_active">     
+                            <mat-error *ngIf="editForm.invalid">{{isActiveError()}}</mat-error>   
                         </mat-form-field>
                     </th>
                     <th>
@@ -121,18 +116,6 @@
 
         </table>
 
-        <div class="button">
-            <button mat-raised-button routerLink="/calendar" color="primary" type="submit">
-                Guardar
-            </button>
-        </div>
-
-
     </mat-tab>
 </mat-tab-group>
 
-<div class="button">
-    <button mat-raised-button routerLink="/calendar" color="primary" type="submit">
-        Salir
-    </button>
-</div>

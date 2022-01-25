@@ -101,6 +101,10 @@
 .button{
     margin: 10px;
 }
+.buttonS{
+  margin: 10px;
+  float: right;
+}
 
 table.mat-table {
     border-spacing: 0;
