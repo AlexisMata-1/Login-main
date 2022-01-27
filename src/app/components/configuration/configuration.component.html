@@ -8,18 +8,21 @@
     <mat-tab label="Correos">
 
         <div class="formulario-dominio">
-            <form [formGroup]="dominioForm">
+            <form [formGroup]="dominioForm" (submit)="agregarDominio()">
                 <table>
                     <tr>
                         <th>Dominio Nuevo</th>
                         <th>
                             <mat-form-field appearance="outline">
+                                <mat-label>Dominio.com</mat-label>
                                 <input matInput formControlName="emailV">
+                                <mat-error *ngIf="dominioForm.invalid">{{errorEmailV()}}</mat-error>
+
                             </mat-form-field>
                         </th>
                         <th>
                             <div class="center">
-                                <button  mat-raised-button color="primary" type="submit">
+                                <button  [disabled]="dominioForm.invalid" mat-raised-button color="primary" type="submit">
                                     Guardar
                                 </button>
                             </div>
@@ -36,12 +39,12 @@
             <tr>
                 <th>Dominios Validos</th>
             </tr>
-            <tr *ngFor="let user of usersInDb">
+            <tr *ngFor="let dominio of dominiosInDb;let i =index">
 
-                <th>{{user.first_name}}</th>
+                <th>{{dominio.domain}}</th>
                
 
-                <th><button  mat-raised-button color="warn" type="submit">
+                <th><button (click)="borrarDominio(i)" mat-raised-button color="warn" type="submit">
                         Eliminar
                     </button></th>
 
