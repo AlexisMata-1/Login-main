@@ -4,6 +4,7 @@ import { MatChipInputEvent } from '@angular/material/chips';
 import { HttpClient } from '@angular/common/http';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { environment } from 'src/environments/environment';
+import Swal from 'sweetalert2';
 
 export interface Fruit {
   name: string;
@@ -19,29 +20,28 @@ export class ConfigurationComponent implements OnInit {
 
   idList: number | undefined;
 
- 
+
   ///////////instancia para llamar a la direccion de la API
   private apiUrl = environment.apiUrl;
 
 
-//ARREGLO PARA GUARDAR LOS USUARIOS
-dominiosInDb: any = [];
+  //ARREGLO PARA GUARDAR LOS USUARIOS
+  dominiosInDb: any = [];
 
-//ARREGLO PARA GUARDAR LOS USUARIOS
+  //ARREGLO PARA GUARDAR LOS USUARIOS
   usersInDb: any = [];
 
   //FORMGROUP DEL FORMULARIO DE DOMINIOS
-  dominioForm=new FormGroup({
-    id_dominio:new FormControl(''),
-     domionio: new FormControl('',[Validators.required])
+  dominioForm = new FormGroup({
+    emailV: new FormControl('', [Validators.required, Validators.minLength(5)]),
   })
-  
-//FORMGROUP DEL FORMULARIO DE EDITAR USUARIO
+
+  //FORMGROUP DEL FORMULARIO DE EDITAR USUARIO
   editForm = new FormGroup({
-    id_user:new FormControl(''),
+    id_user: new FormControl(''),
     first_name: new FormControl('', [Validators.required]),
-    last_name:new FormControl(''),
-    dob:new FormControl(''),
+    last_name: new FormControl(''),
+    dob: new FormControl(''),
     email: new FormControl('', [Validators.required]),
     id_user_type: new FormControl('', [Validators.required]),
     is_active: new FormControl('', [Validators.required]),
@@ -56,23 +56,60 @@ dominiosInDb: any = [];
     })
 
     //PETICION PARA CARGAR LOS DOMINIOS ACEPTADOS A LA LISTA
-    this.http.get(this.apiUrl+ '/Domain').subscribe(res1 =>{
-      this.dominiosInDb= res1;
+    this.http.get(this.apiUrl + '/Domain').subscribe(res1 => {
+      this.dominiosInDb = res1;
     })
   }
 
 
-//BOTON DE AGREGAR DOMINIO EN LA SECCION DE CORREOS ACEPTADOS
-  agregarDominio(form:any){
-    const dominio = this.dominioForm
-    console.log(dominio)
+  //BOTON DE AGREGAR DOMINIO EN LA SECCION DE CORREOS ACEPTADOS
+  agregarDominio() {
 
-    this.http.post(this.apiUrl+'/Dominio',dominio).subscribe(res=>{
+    let dominio = {
+      domain: this.dominioForm.value.emailV,
+      is_active: true
+    }
+console.log(dominio)
+    this.http.post(this.apiUrl + '/Domain', dominio).subscribe(res => {
       console.log(res)
+      
+      this.dominioForm.reset();
+
     })
   }
+///////////////////////////////////////////////BORRAR DOMINIO
+  borrarDominio(index :number ){
+let dominioBorrado=this.dominiosInDb[index]
+
+Swal.fire({
+  title: 'ELIMINAR DOMINIO?',
+  text: "Este dominio dejará de ser válido!",
+  icon: 'warning',
+  showCancelButton: true,
+  confirmButtonColor: '#3085d6',
+  cancelButtonColor: '#d33',
+  confirmButtonText: 'Si quiero borrarlo',
+  cancelButtonText:'No quiero'
+}).then((result) => {
+  if (result.isConfirmed) {
+    
+    this.http.put((this.apiUrl+'/Domain/'+ dominioBorrado.id_domain), dominioBorrado).subscribe(res=>{
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Acción exitosa',
+        text: 'Dominio eliminado exitosamente',
+      })
+      this.dominiosInDb.splice(index, 1);
+    
+    })
+    
+  }
+})
 
 
+
+  }
 
 
 
@@ -81,48 +118,48 @@ dominiosInDb: any = [];
     this.idList = form.id_user;
     const userEdit = form;
     console.log(userEdit)
-//ASIGNA LOS VALORES DEL USUARIO AL FORMULARIO DE EDITAR Y GUARDA LOS DEMÁS DATOS DEL USUARIO
+    //ASIGNA LOS VALORES DEL USUARIO AL FORMULARIO DE EDITAR Y GUARDA LOS DEMÁS DATOS DEL USUARIO
     this.editForm.patchValue({
-      id_user:userEdit.id_user,
+      id_user: userEdit.id_user,
       first_name: userEdit.first_name,
       last_name: userEdit.last_name,
-      dob:userEdit.dob,
+      dob: userEdit.dob,
       email: userEdit.email,
-      id_user_type:userEdit.id_user_type,
-      is_active:userEdit.is_active
+      id_user_type: userEdit.id_user_type,
+      is_active: userEdit.is_active
     })
-console.log(this.editForm)
+    console.log(this.editForm)
 
   }
 
 
-//ACCION DEL BOTON DE GUARDAR DEL FORMULARIO DE EDITAR
+  //ACCION DEL BOTON DE GUARDAR DEL FORMULARIO DE EDITAR
   guardarCambios(editForm: any) {
 
-    const usuarioEd=editForm;
+    const usuarioEd = editForm;
     console.log(usuarioEd);
-        try {
-          this.http.put((this.apiUrl + '/Users/' + usuarioEd.id_user), editForm).subscribe(res => {
+    try {
+      this.http.put((this.apiUrl + '/Users/' + usuarioEd.id_user), editForm).subscribe(res => {
 
-            if (res == null) {
+        if (res == null) {
 
-              console.log('No se pudo cambiar la info')
+          console.log('No se pudo cambiar la info')
 
-            } else {
+        } else {
 
-              console.log(res)
-              this.editForm.reset();
-              this.http.get(this.apiUrl + '/Users').subscribe(res => {
-                this.usersInDb = res;
-              })
-            }
+          console.log(res)
+          this.editForm.reset();
+          this.http.get(this.apiUrl + '/Users').subscribe(res => {
+            this.usersInDb = res;
           })
-
-        } catch (error) {
-          console.log(error)
         }
+      })
+
+    } catch (error) {
+      console.log(error)
+    }
   }
-  
+
 
   userTypeError() {
     var campo = this.editForm.get('id_user_type');
@@ -141,7 +178,16 @@ console.log(this.editForm)
   }
 
 
-
+  errorEmailV() {
+    var campo = this.dominioForm.get('emailV');
+    if (campo?.hasError('required')) {
+      return 'El correo es requerido'
+    }
+    if (campo?.hasError('minlength')) {
+      return 'Longitud Minima de 5 caracteres'
+    }
+    return '';
+  }
 
 }
 

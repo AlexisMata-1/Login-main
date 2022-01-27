@@ -16,13 +16,13 @@ export class RegisterComponent implements OnInit {
 
 
   registerform: FormGroup;
-
+  respuestaDominio: any = [];
 
   constructor(private formBuilder: FormBuilder,
     private http: HttpClient,
     private router: Router) {
 
-    }
+  }
 
   ///////////instancia para llamar a la direccion de la API
   private apiUrl = environment.apiUrl;
@@ -39,7 +39,8 @@ export class RegisterComponent implements OnInit {
         validators: [Validators.required, Validators.minLength(3), Validators.pattern('^[a-zñ A-ZÑ]+$')]
       }),
       date: new FormControl('', [Validators.required]),
-      email: new FormControl('', [Validators.required, Validators.email]),
+      email: new FormControl('', [Validators.required]),
+      domain: new FormControl('', [Validators.required]),
       contrasena: new FormControl('', {
         validators: [Validators.required, Validators.minLength(9)]
       }),
@@ -57,49 +58,72 @@ export class RegisterComponent implements OnInit {
       first_name: this.registerform.value.first_name,
       last_name: this.registerform.value.last_name,
       dob: this.registerform.value.date,
-      email: this.registerform.value.email,
+      email: this.registerform.value.email + '@' + this.registerform.value.domain,
       pass: this.registerform.value.contrasena,
       is_active: true
     }
+
     const diaActual = new Date();
     const fechaForm = this.registerform.value.date;
     const yearsValid = diaActual.getFullYear() - fechaForm.getFullYear()
     const pass1 = this.registerform.value.contrasena
     const pass2 = this.registerform.value.confirmarcontrasena
 
-
-    console.log('este es el resultado ' + yearsValid)
+    console.log(userData)
     if (yearsValid < 17) {
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
         text: 'Fecha de nacimiento fuera del rango',
       })
-      
-    } else if(pass1 != pass2){
+
+    } else if (pass1 != pass2) {
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
         text: 'Las contraseñas no coinciden',
       })
 
-    }else{
+    }
+    else {
 
-      this.http.post(this.apiUrl + '/Users', userData).subscribe(res => {
+      let dominio = {
+        domain: this.registerform.value.domain
+      }
+      console.log('este es el domio')
+      console.log(dominio)
 
-        const respuesta = JSON.stringify(res)
-        if (respuesta.length > 30) {
+      this.http.post(this.apiUrl + '/Domains', dominio).subscribe(res => {
+        this.respuestaDominio = res
+        console.log('esta es la respuesta del backend')
 
-          console.log(res)
-          console.log('Usuarios Registrado exitosamente')
-          this.router.navigate(['/login']);
+        console.log(this.respuestaDominio)
+        console.log('----------------------')
+        if (this.respuestaDominio.length != 0) {
 
+          this.http.post(this.apiUrl + '/Users', userData).subscribe(res => {
+
+            const respuesta = JSON.stringify(res)
+            if (respuesta.length > 30) {
+
+              console.log(res)
+              console.log('Usuarios Registrado exitosamente')
+              this.router.navigate(['/login']);
+
+            } else {
+              console.log(res)
+            }
+
+          })
         } else {
-          console.log(res)
+
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Dominio no válido',
+          })
+
         }
-
-
-
       })
 
     }
@@ -144,6 +168,14 @@ export class RegisterComponent implements OnInit {
     var campo = this.registerform.get('email');
     if (campo?.hasError('required')) {
       return ' El correo es requerido'
+    }
+    return '';
+  }
+
+  errorDomain() {
+    var campo = this.registerform.get('domain');
+    if (campo?.hasError('required')) {
+      return ' El dominio es requerido'
     }
     return '';
   }

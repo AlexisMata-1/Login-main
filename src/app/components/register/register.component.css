@@ -1,0 +1,13 @@
+.form-container{
+    max-width: 500px;
+}
+
+.correo{
+    display: inline-block;
+    width: 180px;
+}
+
+.arroba{
+    display: inline-block;
+    width: auto;
+}
