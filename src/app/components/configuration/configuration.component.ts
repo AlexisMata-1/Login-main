@@ -24,31 +24,17 @@ export class ConfigurationComponent implements OnInit {
   private apiUrl = environment.apiUrl;
 
 
-  addOnBlur = true;
-  readonly separatorKeysCodes = [ENTER, COMMA] as const;
-  fruits: Fruit[] = [{ name: 'arkus.com' }, { name: 'arkus-solutions.com' }, { name: 'arkusnexus.com' }];
+//ARREGLO PARA GUARDAR LOS USUARIOS
+dominiosInDb: any = [];
 
-  add(event: MatChipInputEvent): void {
-    const value = (event.value || '').trim();
-
-    // Add our fruit
-    if (value) {
-      this.fruits.push({ name: value });
-    }
-    // Clear the input value
-    event.chipInput!.clear();
-  }
-
-  remove(fruit: Fruit): void {
-    const index = this.fruits.indexOf(fruit);
-
-    if (index >= 0) {
-      this.fruits.splice(index, 1);
-    }
-  }
-
-
+//ARREGLO PARA GUARDAR LOS USUARIOS
   usersInDb: any = [];
+
+  //FORMGROUP DEL FORMULARIO DE DOMINIOS
+  dominioForm=new FormGroup({
+    id_dominio:new FormControl(''),
+     domionio: new FormControl('',[Validators.required])
+  })
   
 //FORMGROUP DEL FORMULARIO DE EDITAR USUARIO
   editForm = new FormGroup({
@@ -69,7 +55,25 @@ export class ConfigurationComponent implements OnInit {
       this.usersInDb = res;
     })
 
+    //PETICION PARA CARGAR LOS DOMINIOS ACEPTADOS A LA LISTA
+    this.http.get(this.apiUrl+ '/Domain').subscribe(res1 =>{
+      this.dominiosInDb= res1;
+    })
   }
+
+
+//BOTON DE AGREGAR DOMINIO EN LA SECCION DE CORREOS ACEPTADOS
+  agregarDominio(form:any){
+    const dominio = this.dominioForm
+    console.log(dominio)
+
+    this.http.post(this.apiUrl+'/Dominio',dominio).subscribe(res=>{
+      console.log(res)
+    })
+  }
+
+
+
 
 
   //ACCION DEL BOTON DE EDITAR A LADO DE CADA USUARIOS

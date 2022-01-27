@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -19,27 +20,32 @@ export class RegisterComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
     private http: HttpClient,
-    private router: Router) { }
+    private router: Router) {
 
-    ///////////instancia para llamar a la direccion de la API
-    private apiUrl= environment.apiUrl;
+    }
+
+  ///////////instancia para llamar a la direccion de la API
+  private apiUrl = environment.apiUrl;
 
 
   ngOnInit() {
 
-
-
     this.registerform = this.formBuilder.group({
       recaptcha: ['', Validators.required],
-      first_name: new FormControl  ('',{
-        validators: [Validators.required,Validators.minLength(3)]}),
-      last_name: new FormControl('', [Validators.required]),
+      first_name: new FormControl('', {
+        validators: [Validators.required, Validators.minLength(3), Validators.pattern('^[a-zñ A-ZÑ]+$')]
+      }),
+      last_name: new FormControl('', {
+        validators: [Validators.required, Validators.minLength(3), Validators.pattern('^[a-zñ A-ZÑ]+$')]
+      }),
       date: new FormControl('', [Validators.required]),
       email: new FormControl('', [Validators.required, Validators.email]),
-      contrasena: new FormControl ('',{
-        validators: [Validators.required,Validators.minLength(9)]}),
-      confirmarcontrasena: new FormControl ('',{
-        validators: [Validators.required,Validators.minLength(9)]}),
+      contrasena: new FormControl('', {
+        validators: [Validators.required, Validators.minLength(9)]
+      }),
+      confirmarcontrasena: new FormControl('', {
+        validators: [Validators.required, Validators.minLength(9)]
+      }),
     });
 
   }
@@ -55,22 +61,49 @@ export class RegisterComponent implements OnInit {
       pass: this.registerform.value.contrasena,
       is_active: true
     }
-    this.http.post(this.apiUrl + '/Users', userData).subscribe(res => {
-
-      const respuesta=JSON.stringify(res) 
-      if (respuesta.length>30) {
-
-        console.log(res)
-        console.log('Usuarios Registrado exitosamente')
-        this.router.navigate(['/login']);
-
-      }else{
-        console.log(res)
-      }
+    const diaActual = new Date();
+    const fechaForm = this.registerform.value.date;
+    const yearsValid = diaActual.getFullYear() - fechaForm.getFullYear()
+    const pass1 = this.registerform.value.contrasena
+    const pass2 = this.registerform.value.confirmarcontrasena
 
 
+    console.log('este es el resultado ' + yearsValid)
+    if (yearsValid < 17) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Fecha de nacimiento fuera del rango',
+      })
+      
+    } else if(pass1 != pass2){
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Las contraseñas no coinciden',
+      })
 
-    })
+    }else{
+
+      this.http.post(this.apiUrl + '/Users', userData).subscribe(res => {
+
+        const respuesta = JSON.stringify(res)
+        if (respuesta.length > 30) {
+
+          console.log(res)
+          console.log('Usuarios Registrado exitosamente')
+          this.router.navigate(['/login']);
+
+        } else {
+          console.log(res)
+        }
+
+
+
+      })
+
+    }
+
 
   }
 
@@ -87,7 +120,7 @@ export class RegisterComponent implements OnInit {
     if (campo?.hasError('minlength')) {
       return 'Longitud mínima de 3 caracteres'
     }
-    return '';
+    return campo?.hasError('pattern') ? 'Solo se permiten letras' : '';
   }
 
 
@@ -96,7 +129,7 @@ export class RegisterComponent implements OnInit {
     if (campo?.hasError('required')) {
       return ' El apellido es requerido'
     }
-    return '';
+    return campo?.hasError('pattern') ? 'Solo se permiten letras' : '';
   }
 
   errorDate() {

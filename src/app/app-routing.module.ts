@@ -12,12 +12,6 @@ import { Vigilant2Guard } from './vigilant2.guard';
 
 
 const routes: Routes = [
-  {
-    path: '',
-    pathMatch: 'full',
-    component: LoginComponent
-  },
-
 
   {
     path: 'login',
@@ -30,9 +24,8 @@ const routes: Routes = [
   },
   {
     path: 'calendar',
-    component: CalendarComponent,
-    canActivate:[Vigilant2Guard]
-  },
+    component: CalendarComponent
+    },
   {
     path: 'reports',
     component: ReportsComponent,

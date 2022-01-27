@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { localStorageService } from 'src/app/shared/localstorage.service';
 import { environment } from 'src/environments/environment';
+import Swal from 'sweetalert2';
 
 
 
@@ -55,7 +56,11 @@ export class LoginComponent implements OnInit {
 
         if (res == null) {
 
-          console.log('Usuario o contraseña incorrectos')
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Usuario o contraseña incorrectos',
+          })
 
         } else {
 
@@ -63,6 +68,11 @@ export class LoginComponent implements OnInit {
           console.log(JSON.parse(this.localS.getLoc('usuario')))
 
           this.router.navigate(['/calendar']);
+          Swal.fire({
+            icon: 'success',
+            title: 'Bienvenido',
+           
+          })
 
         } 
       })
