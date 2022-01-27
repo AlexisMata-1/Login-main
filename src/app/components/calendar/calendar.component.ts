@@ -4,6 +4,8 @@ import { HttpClient } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
 import { localStorageService } from 'src/app/shared/localstorage.service';
 import { environment } from 'src/environments/environment';
+import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
 
 export interface usuarioI {
   id_user: number;
@@ -105,7 +107,7 @@ export class CalendarComponent implements OnInit {
   public options: any;
   constructor(private fb: FormBuilder,
     private http: HttpClient,
-    public cookie: CookieService,
+    private router: Router,
     public localS: localStorageService,
   ) { }
 
@@ -181,7 +183,7 @@ export class CalendarComponent implements OnInit {
 
 
   }
-  //////////////////////////////////////////////////INSTANCIA DE LOS DATOS DATOS GUARDADOS EN EL LOGIN 
+  ///////////////INSTANCIA DE LOS DATOS DATOS GUARDADOS EN EL LOGIN 
   formU = JSON.parse(this.localS.getLoc('usuario'));
 
   /////////////////////////////////////////////////////////////////////SABER SI ES ADMIN O NO
@@ -205,8 +207,14 @@ export class CalendarComponent implements OnInit {
       date: this.dia1
     }
     this.http.post(this.apiUrl + '/Registers', form1).subscribe(res => {
-      console.log(res)
-    })
+
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Registrado exitosamente',
+       
+      })   
+     })
 
     this.listUsuarios.push(form1);
     console.log(form1);
@@ -220,7 +228,11 @@ export class CalendarComponent implements OnInit {
       date: this.dia1
     }
     this.http.put((this.apiUrl + '/Registers/' + this.formU.id_user), form1).subscribe(res => {
-      console.log( res)
+      Swal.fire({
+        icon: 'success',
+        title: 'Registro Eliminado',
+       
+      })   
     })
     this.listUsuarios.pop();
   }
