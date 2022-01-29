@@ -12,6 +12,10 @@ import { Vigilant2Guard } from './vigilant2.guard';
 
 
 const routes: Routes = [
+  {
+    path: '',
+    component: LoginComponent
+  },
 
   {
     path: 'login',

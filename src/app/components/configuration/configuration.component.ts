@@ -1,15 +1,25 @@
 import { Component, OnInit } from '@angular/core';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { MatChipInputEvent } from '@angular/material/chips';
 import { HttpClient } from '@angular/common/http';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators, ValidatorFn, ValidationErrors } from '@angular/forms';
 import { environment } from 'src/environments/environment';
 import Swal from 'sweetalert2';
 
+/////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////
 export interface Fruit {
   name: string;
 }
 
+export interface UsersType {
+  value: number;
+  viewValue: string;
+}
+export interface Conditions {
+  value: boolean;
+  viewValue: string;
+}
 
 @Component({
   selector: 'app-configuration',
@@ -31,25 +41,50 @@ export class ConfigurationComponent implements OnInit {
   //ARREGLO PARA GUARDAR LOS USUARIOS
   usersInDb: any = [];
 
+
+
   //FORMGROUP DEL FORMULARIO DE DOMINIOS
-  dominioForm = new FormGroup({
-    emailV: new FormControl('', [Validators.required, Validators.minLength(5)]),
-  })
+  public dominioForm:FormGroup
+
 
   //FORMGROUP DEL FORMULARIO DE EDITAR USUARIO
-  editForm = new FormGroup({
-    id_user: new FormControl(''),
-    first_name: new FormControl('', [Validators.required]),
-    last_name: new FormControl(''),
-    dob: new FormControl(''),
-    email: new FormControl('', [Validators.required]),
-    id_user_type: new FormControl('', [Validators.required]),
-    is_active: new FormControl('', [Validators.required]),
-  });
+  public editForm: FormGroup
 
-  constructor(private http: HttpClient) { }
+  // COMBOBOX DE LOS TIPOS DE USUARIOS Y SUS VALORES 
+  usersType: UsersType[] = [
+    { value: 1, viewValue: 'Super Administrador' },
+    { value: 2, viewValue: 'Administrador' },
+    { value: 3, viewValue: 'Colaborador' },
+  ]
+
+  //COMBOBOX PARA CAMBIAR EL IS_ACTIVE
+  condition:Conditions[]=[
+    {value:true , viewValue: 'Activo'},
+    {value:false, viewValue: 'Inactivo'},
+
+  ]
+  constructor(private http: HttpClient,
+    private fb: FormBuilder,
+  ) { }
 
   ngOnInit(): void {
+
+this.dominioForm=this.fb.group({
+  emailV: new FormControl('', [Validators.required, Validators.minLength(5),Validators.pattern('[^@]')]),
+
+})
+
+    this.editForm = this.fb.group({
+      id_user: new FormControl(''),
+      last_name: new FormControl(''),
+      dob: new FormControl(''),
+      first_name: new FormControl(''),
+      email: new FormControl('', [Validators.required]),
+      id_user_type: new FormControl('', [Validators.required]),
+      is_active: new FormControl('', [Validators.required]),
+    })
+
+    
     //uso del get para traer los usuarios registrados en la base de dtaos mediante un select, al cargar la pagina
     this.http.get(this.apiUrl + '/Users').subscribe(res => {
       this.usersInDb = res;
@@ -69,43 +104,43 @@ export class ConfigurationComponent implements OnInit {
       domain: this.dominioForm.value.emailV,
       is_active: true
     }
-console.log(dominio)
+    console.log(dominio)
     this.http.post(this.apiUrl + '/Domain', dominio).subscribe(res => {
       console.log(res)
-      
+
       this.dominioForm.reset();
 
     })
   }
-///////////////////////////////////////////////BORRAR DOMINIO
-  borrarDominio(index :number ){
-let dominioBorrado=this.dominiosInDb[index]
+  ///////////////////////////////////////////////BORRAR DOMINIO
+  borrarDominio(index: number) {
+    let dominioBorrado = this.dominiosInDb[index]
 
-Swal.fire({
-  title: 'ELIMINAR DOMINIO?',
-  text: "Este dominio dejará de ser válido!",
-  icon: 'warning',
-  showCancelButton: true,
-  confirmButtonColor: '#3085d6',
-  cancelButtonColor: '#d33',
-  confirmButtonText: 'Si quiero borrarlo',
-  cancelButtonText:'No quiero'
-}).then((result) => {
-  if (result.isConfirmed) {
-    
-    this.http.put((this.apiUrl+'/Domain/'+ dominioBorrado.id_domain), dominioBorrado).subscribe(res=>{
+    Swal.fire({
+      title: 'ELIMINAR DOMINIO?',
+      text: "Este dominio dejará de ser válido!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si quiero borrarlo',
+      cancelButtonText: 'No quiero'
+    }).then((result) => {
+      if (result.isConfirmed) {
 
-      Swal.fire({
-        icon: 'success',
-        title: 'Acción exitosa',
-        text: 'Dominio eliminado exitosamente',
-      })
-      this.dominiosInDb.splice(index, 1);
-    
+        this.http.put((this.apiUrl + '/Domain/' + dominioBorrado.id_domain), dominioBorrado).subscribe(res => {
+
+          Swal.fire({
+            icon: 'success',
+            title: 'Acción exitosa',
+            text: 'Dominio eliminado exitosamente',
+          })
+          this.dominiosInDb.splice(index, 1);
+
+        })
+
+      }
     })
-    
-  }
-})
 
 
 
@@ -116,6 +151,7 @@ Swal.fire({
   //ACCION DEL BOTON DE EDITAR A LADO DE CADA USUARIOS
   editarUsuario(form: any) {
     this.idList = form.id_user;
+
     const userEdit = form;
     console.log(userEdit)
     //ASIGNA LOS VALORES DEL USUARIO AL FORMULARIO DE EDITAR Y GUARDA LOS DEMÁS DATOS DEL USUARIO
@@ -134,20 +170,29 @@ Swal.fire({
 
 
   //ACCION DEL BOTON DE GUARDAR DEL FORMULARIO DE EDITAR
-  guardarCambios(editForm: any) {
+  guardarCambios(formGuardar: any) {
 
-    const usuarioEd = editForm;
+    const usuarioEd = formGuardar;
     console.log(usuarioEd);
     try {
-      this.http.put((this.apiUrl + '/Users/' + usuarioEd.id_user), editForm).subscribe(res => {
+      this.http.put((this.apiUrl + '/Users/' + usuarioEd.id_user), formGuardar).subscribe(res => {
 
         if (res == null) {
 
-          console.log('No se pudo cambiar la info')
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'No se pudo cambiar la información',
+          })
 
         } else {
 
-          console.log(res)
+          Swal.fire({
+            icon: 'success',
+            title: 'Acción exitosa',
+            text: 'Usuario cambiado exitosamente',
+          })
+          
           this.editForm.reset();
           this.http.get(this.apiUrl + '/Users').subscribe(res => {
             this.usersInDb = res;
@@ -156,7 +201,11 @@ Swal.fire({
       })
 
     } catch (error) {
-      console.log(error)
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: error,
+      })
     }
   }
 
@@ -185,6 +234,9 @@ Swal.fire({
     }
     if (campo?.hasError('minlength')) {
       return 'Longitud Minima de 5 caracteres'
+    }
+    if(campo.hasError('email')){
+      return 'Se requiere un punto'
     }
     return '';
   }
