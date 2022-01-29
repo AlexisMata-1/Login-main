@@ -12,7 +12,11 @@
     margin-top: 10px;
   
   }
-  
+  mat-select{
+    width: 120px;
+  }
+
+
   .header{
     background-color: gray;
     width: 95%;

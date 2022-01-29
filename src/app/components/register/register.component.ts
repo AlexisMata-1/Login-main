@@ -95,10 +95,7 @@ export class RegisterComponent implements OnInit {
 
       this.http.post(this.apiUrl + '/Domains', dominio).subscribe(res => {
         this.respuestaDominio = res
-        console.log('esta es la respuesta del backend')
-
-        console.log(this.respuestaDominio)
-        console.log('----------------------')
+      
         if (this.respuestaDominio.length != 0) {
 
           this.http.post(this.apiUrl + '/Users', userData).subscribe(res => {
@@ -115,7 +112,8 @@ export class RegisterComponent implements OnInit {
             }
 
           })
-        } else {
+        } 
+        else {
 
           Swal.fire({
             icon: 'error',

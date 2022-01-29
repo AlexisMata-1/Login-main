@@ -1,18 +1,26 @@
+<!--------------------------BOTON DE SALIR GENERAL------------------------>
+
 <div class="buttonS">
     <button mat-raised-button routerLink="/calendar" color="warn" type="submit">
         Salir
     </button>
 </div>
+<!--------------------------HEADER DE LA CONFIGURACION------------------------>
+
 <h1>Panel de configuración para Administradores</h1>
 <mat-tab-group dynamicWeigth>
+
     <mat-tab label="Correos">
+        <!--------------------------AGREGAR NUEVO DOMINIO------------------------>
 
         <div class="formulario-dominio">
             <form [formGroup]="dominioForm" (submit)="agregarDominio()">
                 <table>
                     <tr>
                         <th>Dominio Nuevo</th>
+                        
                         <th>
+                           
                             <mat-form-field appearance="outline">
                                 <mat-label>Dominio.com</mat-label>
                                 <input matInput formControlName="emailV">
@@ -22,7 +30,8 @@
                         </th>
                         <th>
                             <div class="center">
-                                <button  [disabled]="dominioForm.invalid" mat-raised-button color="primary" type="submit">
+                                <button [disabled]="dominioForm.invalid" mat-raised-button color="primary"
+                                    type="submit">
                                     Guardar
                                 </button>
                             </div>
@@ -31,33 +40,33 @@
                 </table>
             </form>
         </div>
-
-
+        <!--------------------------LISTA DE DOMINIOS VALIDOS------------------------>
 
         <div class="button">
-  <table>
-            <tr>
-                <th>Dominios Validos</th>
-            </tr>
-            <tr *ngFor="let dominio of dominiosInDb;let i =index">
+            <table>
+                <tr>
+                    <th>Dominios Validos</th>
+                </tr>
+                <tr *ngFor="let dominio of dominiosInDb;let i =index">
 
-                <th>{{dominio.domain}}</th>
-               
+                    <th>{{dominio.domain}}</th>
 
-                <th><button (click)="borrarDominio(i)" mat-raised-button color="warn" type="submit">
-                        Eliminar
-                    </button></th>
 
-            </tr>
+                    <th><button (click)="borrarDominio(i)" mat-raised-button color="warn" type="submit">
+                            Eliminar
+                        </button></th>
 
-        </table>
+                </tr>
+
+            </table>
         </div>
 
 
     </mat-tab>
+    <!-------------------------------------------------USUARIOS---------------------------------------------------------------->
     <mat-tab label="Usuarios">
         <br>
-
+        <!--------------------------CONFIGURACION DE USUARIOS------------------------>
         <form [formGroup]="editForm" (ngSubmit)="guardarCambios(editForm.value)">
             <table>
                 <tr>
@@ -69,9 +78,7 @@
                     <th>Tipo de usuario</th>
                     <th>Activo</th>
                     <th></th>
-
                 </tr>
-
                 <tr>
                     <th>
                         <mat-form-field appearance="outline">
@@ -81,42 +88,39 @@
 
                     <th>
                         <mat-form-field appearance="outline">
-                            <input matInput formControlName="email" [disabled]="false">
+                            <input matInput formControlName="email">
                         </mat-form-field>
                     </th>
 
                     <th>
-                        <mat-form-field appearance="outline">
-                            <input matInput formControlName="id_user_type">
-                            <mat-error *ngIf="editForm.invalid">{{userTypeError()}}</mat-error>
-                        </mat-form-field>
+                        <mat-select [formGroup]="editForm" formControlName="id_user_type">
+                            <mat-option *ngFor="let usersType of usersType" [value]="usersType.value">{{
+                              usersType.viewValue
+                            }}</mat-option>
+                          </mat-select>
                     </th>
 
                     <th>
-                        <mat-form-field appearance="outline">
-                            <input matInput formControlName="is_active">
-                            <mat-error *ngIf="editForm.invalid">{{isActiveError()}}</mat-error>
-                        </mat-form-field>
+                        <mat-select [formGroup]="editForm" formControlName="is_active">
+                            <mat-option *ngFor="let condition of condition" [value]="condition.value">{{
+                                condition.viewValue
+                            }}</mat-option>
+                          </mat-select>
                     </th>
                     <th>
                         <div class="center">
-                            <button mat-raised-button color="primary" type="submit">
+                            <button mat-raised-button color="primary" type="submit" [disabled]="editForm.invalid">
                                 Guardar
                             </button>
                         </div>
                     </th>
-
-
                 </tr>
-
             </table>
-
-
         </form>
-
-
-
         <br>
+        <!--------------------------TABLA DE USUARIOS------------------------>
+
+
         <table>
             <tr>
                 <th>Usuario</th>
