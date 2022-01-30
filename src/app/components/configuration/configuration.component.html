@@ -23,16 +23,16 @@
                            
                             <mat-form-field appearance="outline">
                                 <mat-label>Dominio.com</mat-label>
-                                <input matInput formControlName="emailV">
-                                <mat-error *ngIf="dominioForm.invalid">{{errorEmailV()}}</mat-error>
+                                <input  formControlName="domainV" matInput />
+                                <mat-error *ngIf="dominioForm.invalid">{{errordomainV()}}</mat-error>
 
                             </mat-form-field>
                         </th>
                         <th>
                             <div class="center">
-                                <button [disabled]="dominioForm.invalid" mat-raised-button color="primary"
-                                    type="submit">
-                                    Guardar
+                                <button mat-raised-button color="primary"
+                                    type="submit" [disabled]="dominioForm.invalid">
+                                    Guardar Dominio
                                 </button>
                             </div>
                         </th>

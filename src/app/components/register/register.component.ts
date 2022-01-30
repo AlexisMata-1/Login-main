@@ -32,11 +32,12 @@ export class RegisterComponent implements OnInit {
 
     this.registerform = this.formBuilder.group({
       recaptcha: ['', Validators.required],
+      
       first_name: new FormControl('', {
         validators: [Validators.required, Validators.minLength(3), Validators.pattern('^[a-zñ A-ZÑ]+$')]
       }),
       last_name: new FormControl('', {
-        validators: [Validators.required, Validators.minLength(3), Validators.pattern('^[a-zñ A-ZÑ]+$')]
+        validators: [Validators.required, Validators.minLength(3), Validators.pattern('^[a-zñ A-ZÑ]+$') ]
       }),
       date: new FormControl('', [Validators.required]),
       email: new FormControl('', [Validators.required]),
