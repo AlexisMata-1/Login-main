@@ -44,7 +44,7 @@ export class ConfigurationComponent implements OnInit {
 
 
   //FORMGROUP DEL FORMULARIO DE DOMINIOS
-  public dominioForm:FormGroup
+  public dominioForm: FormGroup
 
 
   //FORMGROUP DEL FORMULARIO DE EDITAR USUARIO
@@ -58,9 +58,9 @@ export class ConfigurationComponent implements OnInit {
   ]
 
   //COMBOBOX PARA CAMBIAR EL IS_ACTIVE
-  condition:Conditions[]=[
-    {value:true , viewValue: 'Activo'},
-    {value:false, viewValue: 'Inactivo'},
+  condition: Conditions[] = [
+    { value: true, viewValue: 'Activo' },
+    { value: false, viewValue: 'Inactivo' },
 
   ]
   constructor(private http: HttpClient,
@@ -69,10 +69,14 @@ export class ConfigurationComponent implements OnInit {
 
   ngOnInit(): void {
 
-this.dominioForm=this.fb.group({
-  emailV: new FormControl('', [Validators.required, Validators.minLength(5),Validators.pattern('[^@]')]),
-
-})
+    this.dominioForm = this.fb.group({
+      domainV: new FormControl('', {
+        //VALIDACION PARA CORREOS DESPUES DEL @ COMO arkus-nexus.com
+        validators: [Validators.required, Validators.pattern('^(([a-zA-Z0-9\-_.]?)+[a-zA-Z0-9]+[\.]+[a-zA-Z]+$)')]
+      })
+      //VALIDACION PARA DOMINIOS COMO .COM.MX
+      //^(([a-zA-Z0-9\-_.]?)+[a-zA-Z0-9]+[\.]+([a-zA-Z]{2,10})+(([\.]+[\a-zA-Z])?)+$)
+    })
 
     this.editForm = this.fb.group({
       id_user: new FormControl(''),
@@ -84,7 +88,7 @@ this.dominioForm=this.fb.group({
       is_active: new FormControl('', [Validators.required]),
     })
 
-    
+
     //uso del get para traer los usuarios registrados en la base de dtaos mediante un select, al cargar la pagina
     this.http.get(this.apiUrl + '/Users').subscribe(res => {
       this.usersInDb = res;
@@ -94,6 +98,7 @@ this.dominioForm=this.fb.group({
     this.http.get(this.apiUrl + '/Domain').subscribe(res1 => {
       this.dominiosInDb = res1;
     })
+
   }
 
 
@@ -101,17 +106,42 @@ this.dominioForm=this.fb.group({
   agregarDominio() {
 
     let dominio = {
-      domain: this.dominioForm.value.emailV,
+      domain: this.dominioForm.value.domainV,
       is_active: true
     }
-    console.log(dominio)
-    this.http.post(this.apiUrl + '/Domain', dominio).subscribe(res => {
-      console.log(res)
 
-      this.dominioForm.reset();
+    console.log(dominio)
+
+
+    this.http.post(this.apiUrl + '/Domains', dominio).subscribe(res => {
+      if (res != null) {
+
+        Swal.fire({
+          icon: 'error',
+          title: 'Correo existente',
+          text: 'Comuniquse con su Administrador',
+        })
+
+      } else {
+
+        this.http.post(this.apiUrl +'/Domain', dominio).subscribe(res => {
+          Swal.fire({
+            icon: 'success',
+            title: 'Correo guardado',
+            text: 'Correo guardado exitosamente',
+          })
+          this.dominioForm.reset();
+        })
+      }
+
 
     })
+
+
+
   }
+
+
   ///////////////////////////////////////////////BORRAR DOMINIO
   borrarDominio(index: number) {
     let dominioBorrado = this.dominiosInDb[index]
@@ -192,7 +222,7 @@ this.dominioForm=this.fb.group({
             title: 'Acción exitosa',
             text: 'Usuario cambiado exitosamente',
           })
-          
+
           this.editForm.reset();
           this.http.get(this.apiUrl + '/Users').subscribe(res => {
             this.usersInDb = res;
@@ -227,18 +257,12 @@ this.dominioForm=this.fb.group({
   }
 
 
-  errorEmailV() {
-    var campo = this.dominioForm.get('emailV');
+  errordomainV() {
+    var campo = this.dominioForm.get('domainV');
     if (campo?.hasError('required')) {
-      return 'El correo es requerido'
+      return 'El dominio es requerido'
     }
-    if (campo?.hasError('minlength')) {
-      return 'Longitud Minima de 5 caracteres'
-    }
-    if(campo.hasError('email')){
-      return 'Se requiere un punto'
-    }
-    return '';
+    return campo?.hasError('pattern') ? 'No incluir arrobas ni espacios y agregar punto "." antes de la extensión de dominio' : '';
   }
 
 }

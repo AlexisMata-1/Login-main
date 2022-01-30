@@ -30,14 +30,14 @@ export class LoginComponent implements OnInit {
 
   constructor(private http: HttpClient,
     private router: Router,
-    public cookie:CookieService,
-    public localS:localStorageService
-   ) {
+    public cookie: CookieService,
+    public localS: localStorageService
+  ) {
 
-    }
-    
-    ///////////instancia para llamar a la direccion de la API
-    private apiUrl= environment.apiUrl;
+  }
+
+  ///////////instancia para llamar a la direccion de la API
+  private apiUrl = environment.apiUrl;
 
 
   ngOnInit(): void {
@@ -52,7 +52,7 @@ export class LoginComponent implements OnInit {
     try {
 
 
-      this.http.post(this.apiUrl+'/Login', form).subscribe(res => {
+      this.http.post(this.apiUrl + '/Login', form).subscribe(res => {
 
         if (res == null) {
 
@@ -64,17 +64,47 @@ export class LoginComponent implements OnInit {
 
         } else {
 
-          this.localS.setLoc('usuario',JSON.stringify(res))
-          console.log(JSON.parse(this.localS.getLoc('usuario')))
+          this.http.post(this.apiUrl + '/Logins', form).subscribe(res => {
+            if (res != null) {
 
-          this.router.navigate(['/calendar']);
-          Swal.fire({
-            icon: 'success',
-            title: 'Bienvenido',
-           
+              Swal.fire({
+                icon: 'error',
+                title: 'Usuario fuera de servico',
+                text: 'Comuniquese con su Administrador',
+              })
+
+            } else {
+
+              this.http.post(this.apiUrl + '/Login', form).subscribe(res => {
+
+                  this.localS.setLoc('usuario', JSON.stringify(res))
+              console.log(JSON.parse(this.localS.getLoc('usuario')))
+
+              this.router.navigate(['/calendar']);
+              Swal.fire({
+                icon: 'success',
+                title: 'Bienvenido',
+
+              })
+              })
+            
+
+
+            }
+
+
+
+
+
           })
 
-        } 
+
+
+
+
+
+        }
+
       })
 
     } catch (error) {
