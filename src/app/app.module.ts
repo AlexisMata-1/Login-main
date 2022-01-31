@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import {LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -29,8 +29,11 @@ import { HttpClientModule } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
 import { localStorageService } from '.././app/shared/localstorage.service'
 
-
-
+//IMPORTACION DE LOCALE PARA CAMBIAR AL ESPAÑOL LAS FECHAS DEL CALENDARIO
+import localePy from '@angular/common/locales/es';
+import { registerLocaleData } from '@angular/common';
+registerLocaleData(localePy, 'es');
+///////////////////////////////////////////////////////////////////////
 
 @NgModule({
   declarations: [
@@ -68,7 +71,9 @@ import { localStorageService } from '.././app/shared/localstorage.service'
 
   ],
   providers: [CookieService,
-    localStorageService],
+    localStorageService,
+    //HACIENDO LA INYECCION PAERA CAMBIAR EL IDIOMA A ESPAÑOL
+    { provide: LOCALE_ID, useValue: 'es' }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
