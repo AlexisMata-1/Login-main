@@ -1,11 +1,11 @@
 
 <mat-toolbar color= "primary">
-  <button mat-button routerLink = "login" [disabled]="isActive() " >
+  <button mat-button routerLink = "login" *ngIf="!isActive() " >
     <mat-icon>login</mat-icon>
     Iniciar Sesión
   </button>
 
-  <button mat-button routerLink = "login" (click)=" LogOut()"  [disabled]=" isLogout()">
+  <button mat-button routerLink = "login" (click)=" LogOut()" *ngIf="!isLogout()">
     <mat-icon>login</mat-icon>
     Cerrar Sesión
   </button>
