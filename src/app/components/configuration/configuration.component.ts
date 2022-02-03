@@ -102,29 +102,63 @@ export class ConfigurationComponent implements OnInit {
   }
 
 
-  //BOTON DE AGREGAR DOMINIO EN LA SECCION DE CORREOS ACEPTADOS
+  //////////////////////////////////////////////////////////////////BOTON DE AGREGAR DOMINIO EN LA SECCION DE CORREOS ACEPTADOS
   agregarDominio() {
 
     let dominio = {
       domain: this.dominioForm.value.domainV,
       is_active: true
     }
-
-    console.log(dominio)
-
-
     this.http.post(this.apiUrl + '/Domains', dominio).subscribe(res => {
-      if (res != null) {
+      let respuesta: any = []
+      respuesta = res
+      console.log(res)
+      console.log(respuesta[0].domain)
+      //VALIDAMOS QUE EL SELECT NOS DEVUELVA ALGO
+      if (respuesta.length > 0) {
+        //CUANDO NOS DEVUELVA LA INFORMACION DEL DOMINIO EXISTENTE VALIDAMOS QUE ESTÉ ACTIVO O NO
+        if (respuesta[0].is_active == 1) {
+          Swal.fire({
+            icon: 'info',
+            title: 'Correo activo',
+            text: 'El correo solicitado está actualmente en uso',
+          })
+          this.dominioForm.reset();
 
-        Swal.fire({
-          icon: 'error',
-          title: 'Correo existente',
-          text: 'Comuniquse con su Administrador',
-        })
+        } else {
+          //SI NO ESTÁ ACTIVO MANDAMOS MENSAJE DE SI DESEA ACTIVARLO NUEVAMENTE
+          Swal.fire({
+            title: 'Correo existente',
+            text: "Quiere volver a habilitarlo?",
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'Cancelar',
+            confirmButtonText: 'Habilitarlo',
 
+          }).then((result) => {
+            if (result.isConfirmed) {
+              //EN CASO DE QUE QUIER ACTIVARLO SE ENVIA UN PUT PARA CAMBIARLO 
+              this.http.put((this.apiUrl + '/Domains/' + respuesta[0].id_domain), respuesta).subscribe(res => {
+                console.log(res)
+
+                Swal.fire({
+                  icon: 'success',
+                  title: 'Acción exitosa',
+                  text: 'Dominio actualizado exitosamente, recargue la pagina para ver el cambio',
+                })
+                this.dominioForm.reset();
+
+              })
+
+            }
+          })
+        }
+        //SI LA RESPUESTA DEL SELECT ES 0, ENTONCES INSERTA EL DOMINIO EN LA BASE DE DATOS
       } else {
 
-        this.http.post(this.apiUrl +'/Domain', dominio).subscribe(res => {
+        this.http.post(this.apiUrl + '/Domain', dominio).subscribe(res => {
           Swal.fire({
             icon: 'success',
             title: 'Correo guardado',
@@ -178,7 +212,7 @@ export class ConfigurationComponent implements OnInit {
 
 
 
-  //ACCION DEL BOTON DE EDITAR A LADO DE CADA USUARIOS
+  ////////////////////////////////////////////////////////ACCION DEL BOTON DE EDITAR A LADO DE CADA USUARIOS
   editarUsuario(form: any) {
     this.idList = form.id_user;
 
@@ -199,7 +233,7 @@ export class ConfigurationComponent implements OnInit {
   }
 
 
-  //ACCION DEL BOTON DE GUARDAR DEL FORMULARIO DE EDITAR
+  //////////////////////////////////////////////////////////////////ACCION DEL BOTON DE GUARDAR DEL FORMULARIO DE EDITAR
   guardarCambios(formGuardar: any) {
 
     const usuarioEd = formGuardar;

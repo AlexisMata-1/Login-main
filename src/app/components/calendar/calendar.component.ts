@@ -458,11 +458,23 @@ export class CalendarComponent implements OnInit {
     this.http.put((this.apiUrl + '/Registers/' + this.formU.id_user), form1).subscribe(res => {
       let respuesta: any=[]
       respuesta=res
-      Swal.fire({
+      console.log(respuesta)
+      if(respuesta.msg=="No estas registrado en este dia"){
+
+        Swal.fire({
+          icon: 'info',
+          title:respuesta.msg,
+         
+        }) 
+
+      }else{
+         Swal.fire({
         icon: 'success',
         title:respuesta.msg,
        
-      })  
+      })   
+      }
+     
     })
     this.listUsuarios5.pop();
   }
@@ -503,11 +515,23 @@ export class CalendarComponent implements OnInit {
     this.http.put((this.apiUrl + '/Registers/' + this.formU.id_user), form1).subscribe(res => {
       let respuesta: any=[]
       respuesta=res
-      Swal.fire({
+      console.log(respuesta)
+      if(respuesta.msg=="No estas registrado en este dia"){
+
+        Swal.fire({
+          icon: 'info',
+          title:respuesta.msg,
+         
+        }) 
+
+      }else{
+         Swal.fire({
         icon: 'success',
         title:respuesta.msg,
        
-      })  
+      })   
+      }
+     
     })
     this.listUsuarios6.pop();
   }
