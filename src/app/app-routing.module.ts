@@ -28,7 +28,9 @@ const routes: Routes = [
   },
   {
     path: 'calendar',
-    component: CalendarComponent
+    component: CalendarComponent,
+    canActivate: [Vigilant2Guard ]
+
     },
   {
     path: 'reports',
