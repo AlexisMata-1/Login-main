@@ -113,7 +113,6 @@ export class ConfigurationComponent implements OnInit {
       let respuesta: any = []
       respuesta = res
       console.log(res)
-      console.log(respuesta[0].domain)
       //VALIDAMOS QUE EL SELECT NOS DEVUELVA ALGO
       if (respuesta.length > 0) {
         //CUANDO NOS DEVUELVA LA INFORMACION DEL DOMINIO EXISTENTE VALIDAMOS QUE ESTÉ ACTIVO O NO
