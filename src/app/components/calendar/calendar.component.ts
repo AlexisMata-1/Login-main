@@ -118,9 +118,9 @@ export class CalendarComponent implements OnInit {
 
 
 
-    console.log(this.dia1)
-    console.log('------------------------------------------------------')
-    console.log(this.isUser())
+    //console.log(this.dia1)
+    //console.log('------------------------------------------------------')
+    //console.log(this.isUser())
 
     ////////////////////////////CONSULTA USUARIOS DIA1//////////////////////////////////////
     let consulta = {
@@ -128,7 +128,7 @@ export class CalendarComponent implements OnInit {
     }
     this.http.post(this.apiUrl + '/Register', consulta).subscribe(res => {
       this.listUsuarios = res;
-      console.log(this.listUsuarios)
+      //console.log(this.listUsuarios)
     });
 
     //////////////////////////////////CONSULTA USUARIO DIA2///////////////////////////////
@@ -138,7 +138,7 @@ export class CalendarComponent implements OnInit {
     }
     this.http.post(this.apiUrl + '/Register', consulta2).subscribe(res => {
       this.listUsuarios2 = res;
-      console.log(this.listUsuarios2)
+      //console.log(this.listUsuarios2)
     });
 
     //////////////////////////////////CONSULTA USUARIO DIA3///////////////////////////////
@@ -148,7 +148,7 @@ export class CalendarComponent implements OnInit {
     }
     this.http.post(this.apiUrl + '/Register', consulta3).subscribe(res => {
       this.listUsuarios3 = res;
-      console.log(this.listUsuarios3)
+      //console.log(this.listUsuarios3)
     });
     //////////////////////////////////CONSULTA USUARIO DIA4///////////////////////////////
 
@@ -157,7 +157,7 @@ export class CalendarComponent implements OnInit {
     }
     this.http.post(this.apiUrl + '/Register', consulta4).subscribe(res => {
       this.listUsuarios4 = res;
-      console.log(this.listUsuarios4)
+      //console.log(this.listUsuarios4)
     });
 
     //////////////////////////////////CONSULTA USUARIO DIA5///////////////////////////////
@@ -167,7 +167,7 @@ export class CalendarComponent implements OnInit {
     }
     this.http.post(this.apiUrl + '/Register', consulta5).subscribe(res => {
       this.listUsuarios5 = res;
-      console.log(this.listUsuarios5)
+      //console.log(this.listUsuarios5)
     });
 
     //////////////////////////////////CONSULTA USUARIO DIA6///////////////////////////////
@@ -177,7 +177,7 @@ export class CalendarComponent implements OnInit {
     }
     this.http.post(this.apiUrl + '/Register', consulta6).subscribe(res => {
       this.listUsuarios6 = res;
-      console.log(this.listUsuarios6)
+      //console.log(this.listUsuarios6)
     });
 
 
@@ -190,6 +190,8 @@ export class CalendarComponent implements OnInit {
   isUser() {
     if (this.formU.id_user_type == 3) {
       return true
+    } else {
+      return false
     }
   }
 
@@ -207,18 +209,32 @@ export class CalendarComponent implements OnInit {
       date: this.dia1
     }
     this.http.post(this.apiUrl + '/Registers', form1).subscribe(res => {
-      console.log(res)
-      let respuesta: any=[]
-      respuesta=res
+      // //console.log(res)
+      let respuesta: any = []
+      respuesta = res
 
-      Swal.fire({
-        icon: 'success',
-        title: respuesta.msg,
-       
-      })   
-     })
+      if (respuesta.msg == "Usuario ya registrado") {
 
-    this.listUsuarios.push(form1);
+        Swal.fire({
+          icon: 'info',
+          title: respuesta.msg,
+        })
+
+      } else {
+
+        Swal.fire({
+          icon: 'success',
+          title: respuesta.msg,
+
+        })
+
+        this.listUsuarios.push(form1);
+
+      }
+
+
+    })
+
   }
 
   Eliminar1() {
@@ -229,27 +245,28 @@ export class CalendarComponent implements OnInit {
       date: this.dia1
     }
     this.http.put((this.apiUrl + '/Registers/' + this.formU.id_user), form1).subscribe(res => {
-      let respuesta: any=[]
-      respuesta=res
-      console.log(respuesta)
-      if(respuesta.msg=="No estas registrado en este dia"){
+      let respuesta: any = []
+      respuesta = res
+      // //console.log(respuesta)
+      if (respuesta.msg == "No estas registrado en este dia") {
 
         Swal.fire({
           icon: 'info',
-          title:respuesta.msg,
-         
-        }) 
+          title: respuesta.msg,
+        })
 
-      }else{
-         Swal.fire({
-        icon: 'success',
-        title:respuesta.msg,
-       
-      })   
+      } else {
+
+        Swal.fire({
+          icon: 'success',
+          title: respuesta.msg,
+        })
+
+        this.listUsuarios.pop();
+
       }
-     
+
     })
-    this.listUsuarios.pop();
   }
   ///////////////evento click de los botones Registrar en cada día
   Registro2() {
@@ -264,19 +281,27 @@ export class CalendarComponent implements OnInit {
       date: this.dia2
     }
     this.http.post(this.apiUrl + '/Registers', form1).subscribe(res => {
-      let respuesta: any=[]
-      respuesta=res
+      let respuesta: any = []
+      respuesta = res
+   if (respuesta.msg == "Usuario ya registrado") {
 
-      Swal.fire({
-        icon: 'success',
-        title: respuesta.msg,
-       
-      })   
-    
+        Swal.fire({
+          icon: 'info',
+          title: respuesta.msg,
+        })
+
+      } else {
+
+        Swal.fire({
+          icon: 'success',
+          title: respuesta.msg,
+
+        })
+
+        this.listUsuarios2.push(form1);
+
+      }
     })
-
-    this.listUsuarios2.push(form1);
-    console.log(form1);
   }
 
   Eliminar2() {
@@ -287,27 +312,28 @@ export class CalendarComponent implements OnInit {
       date: this.dia2
     }
     this.http.put((this.apiUrl + '/Registers/' + this.formU.id_user), form1).subscribe(res => {
-      let respuesta: any=[]
-      respuesta=res
-      console.log(respuesta)
-      if(respuesta.msg=="No estas registrado en este dia"){
+      let respuesta: any = []
+      respuesta = res
+      // console.log(respuesta)
+      if (respuesta.msg == "No estas registrado en este dia") {
 
         Swal.fire({
           icon: 'info',
-          title:respuesta.msg,
-         
-        }) 
+          title: respuesta.msg,
 
-      }else{
-         Swal.fire({
-        icon: 'success',
-        title:respuesta.msg,
-       
-      })   
+        })
+
+      } else {
+        Swal.fire({
+          icon: 'success',
+          title: respuesta.msg,
+
+        })
+        this.listUsuarios2.pop();
+
       }
-     
+
     })
-    this.listUsuarios2.pop();
   }
   ///////////////evento click de los botones Registrar en cada día
   Registro3() {
@@ -322,18 +348,31 @@ export class CalendarComponent implements OnInit {
       date: this.dia3
     }
     this.http.post(this.apiUrl + '/Registers', form1).subscribe(res => {
-      let respuesta: any=[]
-      respuesta=res
+      let respuesta: any = []
+      respuesta = res
 
-      Swal.fire({
-        icon: 'success',
-        title: respuesta.msg,
-       
-      })   
-      
+      if (respuesta.msg == "Usuario ya registrado") {
+
+        Swal.fire({
+          icon: 'info',
+          title: respuesta.msg,
+        })
+
+      } else {
+
+        Swal.fire({
+          icon: 'success',
+          title: respuesta.msg,
+
+        })
+
+        this.listUsuarios3.push(form1);
+
+      }
+
+
     })
 
-    console.log(form1);
   }
 
   Eliminar3() {
@@ -343,27 +382,28 @@ export class CalendarComponent implements OnInit {
       date: this.dia3
     }
     this.http.put((this.apiUrl + '/Registers/' + this.formU.id_user), form1).subscribe(res => {
-      let respuesta: any=[]
-      respuesta=res
-      console.log(respuesta)
-      if(respuesta.msg=="No estas registrado en este dia"){
+      let respuesta: any = []
+      respuesta = res
+      //console.log(respuesta)
+      if (respuesta.msg == "No estas registrado en este dia") {
 
         Swal.fire({
           icon: 'info',
-          title:respuesta.msg,
-         
-        }) 
+          title: respuesta.msg,
 
-      }else{
-         Swal.fire({
-        icon: 'success',
-        title:respuesta.msg,
-       
-      })   
+        })
+
+      } else {
+        Swal.fire({
+          icon: 'success',
+          title: respuesta.msg,
+
+        })
+            this.listUsuarios3.pop();
+
       }
-     
+
     })
-    this.listUsuarios3.pop();
   }
   ///////////////evento click de los botones Registrar en cada día
   Registro4() {
@@ -378,20 +418,31 @@ export class CalendarComponent implements OnInit {
       date: this.dia4
     }
     this.http.post(this.apiUrl + '/Registers', form1).subscribe(res => {
-      let respuesta: any=[]
-      respuesta=res
+      let respuesta: any = []
+      respuesta = res
+      if (respuesta.msg == "Usuario ya registrado") {
 
-      Swal.fire({
-        icon: 'success',
-        title: respuesta.msg,
-       
-      })   
-    
+        Swal.fire({
+          icon: 'info',
+          title: respuesta.msg,
+        })
+
+      } else {
+
+        Swal.fire({
+          icon: 'success',
+          title: respuesta.msg,
+
+        })
+
+        this.listUsuarios4.push(form1);
+
+      }
+
+
     })
-    this.listUsuarios4.push(form1);
-    console.log(form1);
-  }
 
+  }
   Eliminar4() {
     const form1 = {
       id_user: this.formU.id_user,
@@ -399,27 +450,28 @@ export class CalendarComponent implements OnInit {
       date: this.dia4
     }
     this.http.put((this.apiUrl + '/Registers/' + this.formU.id_user), form1).subscribe(res => {
-      let respuesta: any=[]
-      respuesta=res
-      console.log(respuesta)
-      if(respuesta.msg=="No estas registrado en este dia"){
+      let respuesta: any = []
+      respuesta = res
+      //console.log(respuesta)
+      if (respuesta.msg == "No estas registrado en este dia") {
 
         Swal.fire({
           icon: 'info',
-          title:respuesta.msg,
-         
-        }) 
+          title: respuesta.msg,
 
-      }else{
-         Swal.fire({
-        icon: 'success',
-        title:respuesta.msg,
-       
-      })   
+        })
+
+      } else {
+        Swal.fire({
+          icon: 'success',
+          title: respuesta.msg,
+
+        })
+         this.listUsuarios4.pop();
+
       }
-     
+
     })
-    this.listUsuarios4.pop();
   }
   ///////////////evento click de los botones Registrar en cada día
   Registro5() {
@@ -434,18 +486,31 @@ export class CalendarComponent implements OnInit {
       date: this.dia5
     }
     this.http.post(this.apiUrl + '/Registers', form1).subscribe(res => {
-      let respuesta: any=[]
-      respuesta=res
+      let respuesta: any = []
+      respuesta = res
 
-      Swal.fire({
-        icon: 'success',
-        title: respuesta.msg,
-       
-      })   
-    
+      if (respuesta.msg == "Usuario ya registrado") {
+
+        Swal.fire({
+          icon: 'info',
+          title: respuesta.msg,
+        })
+
+      } else {
+
+        Swal.fire({
+          icon: 'success',
+          title: respuesta.msg,
+
+        })
+
+        this.listUsuarios5.push(form1);
+
+      }
+
+
     })
-    this.listUsuarios5.push(form1);
-    console.log(form1);
+
   }
 
   Eliminar5() {
@@ -456,27 +521,28 @@ export class CalendarComponent implements OnInit {
       date: this.dia5
     }
     this.http.put((this.apiUrl + '/Registers/' + this.formU.id_user), form1).subscribe(res => {
-      let respuesta: any=[]
-      respuesta=res
-      console.log(respuesta)
-      if(respuesta.msg=="No estas registrado en este dia"){
+      let respuesta: any = []
+      respuesta = res
+      //console.log(respuesta)
+      if (respuesta.msg == "No estas registrado en este dia") {
 
         Swal.fire({
           icon: 'info',
-          title:respuesta.msg,
-         
-        }) 
+          title: respuesta.msg,
 
-      }else{
-         Swal.fire({
-        icon: 'success',
-        title:respuesta.msg,
-       
-      })   
+        })
+
+      } else {
+        Swal.fire({
+          icon: 'success',
+          title: respuesta.msg,
+
+        })
+            this.listUsuarios5.pop();
+
       }
-     
+
     })
-    this.listUsuarios5.pop();
   }
   ///////////////evento click de los botones Registrar en cada día
   Registro6() {
@@ -491,20 +557,32 @@ export class CalendarComponent implements OnInit {
       date: this.dia6
     }
     this.http.post(this.apiUrl + '/Registers', form1).subscribe(res => {
-      let respuesta: any=[]
-      respuesta=res
+      let respuesta: any = []
+      respuesta = res
 
-      Swal.fire({
-        icon: 'success',
-        title: respuesta.msg,
-       
-      })   
-    
+      if (respuesta.msg == "Usuario ya registrado") {
+
+        Swal.fire({
+          icon: 'info',
+          title: respuesta.msg,
+        })
+
+      } else {
+
+        Swal.fire({
+          icon: 'success',
+          title: respuesta.msg,
+
+        })
+
+        this.listUsuarios6.push(form1);
+
+      }
+
+
     })
-    this.listUsuarios6.push(form1);
-    console.log(form1);
-  }
 
+  }
   Eliminar6() {
 
     const form1 = {
@@ -513,26 +591,27 @@ export class CalendarComponent implements OnInit {
       date: this.dia6
     }
     this.http.put((this.apiUrl + '/Registers/' + this.formU.id_user), form1).subscribe(res => {
-      let respuesta: any=[]
-      respuesta=res
-      console.log(respuesta)
-      if(respuesta.msg=="No estas registrado en este dia"){
+      let respuesta: any = []
+      respuesta = res
+      //console.log(respuesta)
+      if (respuesta.msg == "No estas registrado en este dia") {
 
         Swal.fire({
           icon: 'info',
-          title:respuesta.msg,
-         
-        }) 
+          title: respuesta.msg,
 
-      }else{
-         Swal.fire({
-        icon: 'success',
-        title:respuesta.msg,
-       
-      })   
+        })
+
+      } else {
+        Swal.fire({
+          icon: 'success',
+          title: respuesta.msg,
+
+        })
+            this.listUsuarios6.pop();
+
       }
-     
+
     })
-    this.listUsuarios6.pop();
   }
 }
