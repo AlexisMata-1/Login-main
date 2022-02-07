@@ -8,14 +8,13 @@ import Swal from 'sweetalert2';
 /////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////
-export interface Fruit {
-  name: string;
-}
+
 
 export interface UsersType {
   value: number;
   viewValue: string;
 }
+
 export interface Conditions {
   value: boolean;
   viewValue: string;
@@ -28,6 +27,7 @@ export interface Conditions {
 })
 export class ConfigurationComponent implements OnInit {
 
+  //valor para saber cual usuario mandamos a configuracion
   idList: number | undefined;
 
 
@@ -72,7 +72,7 @@ export class ConfigurationComponent implements OnInit {
     this.dominioForm = this.fb.group({
       domainV: new FormControl('', {
         //VALIDACION PARA CORREOS DESPUES DEL @ COMO arkus-nexus.com
-        validators: [Validators.required, Validators.pattern('^(([a-zA-Z0-9\-_.]?)+[a-zA-Z0-9]+[\.]+[a-zA-Z]+$)')]
+        validators: [Validators.required, Validators.minLength(5), Validators.pattern('^(([a-zA-Z0-9\-_.]?)+[a-zA-Z0-9]+[\.]+[a-zA-Z]+$)')]
       })
       //VALIDACION PARA DOMINIOS COMO .COM.MX
       //^(([a-zA-Z0-9\-_.]?)+[a-zA-Z0-9]+[\.]+([a-zA-Z]{2,10})+(([\.]+[\a-zA-Z])?)+$)
@@ -82,7 +82,7 @@ export class ConfigurationComponent implements OnInit {
       id_user: new FormControl(''),
       last_name: new FormControl(''),
       dob: new FormControl(''),
-      first_name: new FormControl(''),
+      first_name: new FormControl('', [Validators.required]),
       email: new FormControl('', [Validators.required]),
       id_user_type: new FormControl('', [Validators.required]),
       is_active: new FormControl('', [Validators.required]),
@@ -112,7 +112,7 @@ export class ConfigurationComponent implements OnInit {
     this.http.post(this.apiUrl + '/Domains', dominio).subscribe(res => {
       let respuesta: any = []
       respuesta = res
-      console.log(res)
+      // console.log(res)
       //VALIDAMOS QUE EL SELECT NOS DEVUELVA ALGO
       if (respuesta.length > 0) {
         //CUANDO NOS DEVUELVA LA INFORMACION DEL DOMINIO EXISTENTE VALIDAMOS QUE ESTÉ ACTIVO O NO
@@ -140,7 +140,7 @@ export class ConfigurationComponent implements OnInit {
             if (result.isConfirmed) {
               //EN CASO DE QUE QUIER ACTIVARLO SE ENVIA UN PUT PARA CAMBIARLO 
               this.http.put((this.apiUrl + '/Domains/' + respuesta[0].id_domain), respuesta).subscribe(res => {
-                console.log(res)
+                // console.log(res)
 
                 Swal.fire({
                   icon: 'success',
@@ -216,7 +216,7 @@ export class ConfigurationComponent implements OnInit {
     this.idList = form.id_user;
 
     const userEdit = form;
-    console.log(userEdit)
+    // console.log(userEdit)
     //ASIGNA LOS VALORES DEL USUARIO AL FORMULARIO DE EDITAR Y GUARDA LOS DEMÁS DATOS DEL USUARIO
     this.editForm.patchValue({
       id_user: userEdit.id_user,
@@ -227,7 +227,7 @@ export class ConfigurationComponent implements OnInit {
       id_user_type: userEdit.id_user_type,
       is_active: userEdit.is_active
     })
-    console.log(this.editForm)
+    // console.log(this.editForm)
 
   }
 
@@ -236,7 +236,7 @@ export class ConfigurationComponent implements OnInit {
   guardarCambios(formGuardar: any) {
 
     const usuarioEd = formGuardar;
-    console.log(usuarioEd);
+    // console.log(usuarioEd);
     try {
       this.http.put((this.apiUrl + '/Users/' + usuarioEd.id_user), formGuardar).subscribe(res => {
 
@@ -294,6 +294,9 @@ export class ConfigurationComponent implements OnInit {
     var campo = this.dominioForm.get('domainV');
     if (campo?.hasError('required')) {
       return 'El dominio es requerido'
+    }
+    if (campo?.hasError('minlength')) {
+      return 'Longitud mínima de 5 caracteres'
     }
     return campo?.hasError('pattern') ? 'No incluir arrobas ni espacios y agregar punto "." antes de la extensión de dominio' : '';
   }
