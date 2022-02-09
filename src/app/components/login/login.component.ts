@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { LoginI } from 'src/app/Interfaces/LoginI';
 import { UserService } from '../../shared/api-service'
 import { HttpClient } from '@angular/common/http';
@@ -21,20 +21,19 @@ import Swal from 'sweetalert2';
 
 export class LoginComponent implements OnInit {
 
+loginForm:FormGroup;
+
   domains: any = []
   domainsValid: any = []
 
   private userservices: UserService
 
-  loginForm = new FormGroup({
-    email: new FormControl('', [Validators.required, Validators.email]),
-    pass: new FormControl('', [Validators.required]),
-  });
+ 
 
   constructor(private http: HttpClient,
     private router: Router,
-    public cookie: CookieService,
-    public localS: localStorageService
+    public localS: localStorageService,
+    private formBuilder :FormBuilder
   ) {
 
   }
@@ -44,6 +43,11 @@ export class LoginComponent implements OnInit {
 
 
   ngOnInit(): void {
+
+    this.loginForm = this.formBuilder.group({
+      email: new FormControl('', [Validators.required, Validators.email]),
+      pass: new FormControl('', [Validators.required, Validators.minLength(9)]),
+    });
 
     this.http.get(this.apiUrl + '/Domain').subscribe(res => {
       this.domains = res
@@ -138,11 +142,23 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  get email() {
-    return this.loginForm.get('email');
+  errorPass() {
+    var campo = this.loginForm.get('pass');
+    if (campo?.hasError('required')) {
+      return 'La Contraseña es requerida'
+    }
+    if (campo?.hasError('minlength')) {
+      return 'La contraseña debe contener minimo 9 caracteres'
+    }
+
+    return '';
   }
 
-  get pass() {
-    return this.loginForm.get('pass');
+  errorEmail() {
+    var campo = this.loginForm.get('email');
+    if (campo?.hasError('required')) {
+      return ' El correo es requerido'
+    }
+    return '';
   }
 }
