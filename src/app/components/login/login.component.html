@@ -1,36 +1,25 @@
 
 <div class="form-container mat-elevation-z5">
     
-    <h1>Login</h1>
+    <h1>Inicio de Sesión</h1>
 
     <form [formGroup] = "loginForm" (ngSubmit)="onSubmit(loginForm.value)">
-        <mat-form-field>
-
-            <input matInput placeholder="Correo Electronico" formControlName = "email" type="email">
-            
-            <mat-error *ngIf = "email?.errors?.['required']">
-                Correo Electronico es requerido 
-            </mat-error>
-
-            <mat-error *ngIf = "email?.errors?.['email']">
-                Por favor escribar un formato de Correo Electronico 
-            </mat-error>
-
+        
+        <mat-form-field appearance="outline">
+            <mat-label>Correo </mat-label>
+            <input formControlName="email"  matInput />
+            <mat-error *ngIf="loginForm.invalid">{{errorEmail()}}</mat-error>
         </mat-form-field>
 
-        <mat-form-field>
-
-            <input matInput placeholder="Contraseña" formControlName = "pass" type="password">
-
-            <mat-error *ngIf = "pass?.errors?.['required']">
-                Contraseña es requerida 
-            </mat-error>
-
+        <mat-form-field appearance="outline">
+            <mat-label>Contraseña</mat-label>
+            <input formControlName="pass" type="password" matInput />
+            <mat-error *ngIf="loginForm.invalid">{{errorPass()}}</mat-error>
         </mat-form-field>
 
         <div class="center">
             <button mat-raised-button color= "primary" type= "submit">
-                Login
+                Iniciar Sesión
             </button>
         </div>
 
