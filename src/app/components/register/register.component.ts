@@ -70,7 +70,7 @@ export class RegisterComponent implements OnInit {
     const pass1 = this.registerform.value.contrasena
     const pass2 = this.registerform.value.confirmarcontrasena
 
-    console.log(userData)
+    // console.log(userData)
     if (yearsValid < 17) {
       Swal.fire({
         icon: 'error',
@@ -91,21 +91,27 @@ export class RegisterComponent implements OnInit {
       let dominio = {
         domain: this.registerform.value.domain
       }
-      console.log('este es el domio')
-      console.log(dominio)
+      // console.log('este es el dominioo')
+      // console.log(dominio)
 
       this.http.post(this.apiUrl + '/Domains', dominio).subscribe(res => {
         this.respuestaDominio = res
       
         if (this.respuestaDominio.length != 0) {
 
-          this.http.post(this.apiUrl + '/Users', userData).subscribe(res => {
+
+          if(this.respuestaDominio[0].is_active==1){
+              this.http.post(this.apiUrl + '/Users', userData).subscribe(res => {
 
             const respuesta = JSON.stringify(res)
             if (respuesta.length > 30) {
 
-              console.log(res)
-              console.log('Usuarios Registrado exitosamente')
+              // console.log(res)
+              Swal.fire({
+                icon: 'success',
+                title: 'Registro Exitoso',
+                text: 'Ahora puedes iniciar sesión',
+              })
               this.router.navigate(['/login']);
 
             } else {
@@ -113,6 +119,15 @@ export class RegisterComponent implements OnInit {
             }
 
           })
+          }else{
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'Dominio no válido',
+            })
+  
+          }
+        
         } 
         else {
 

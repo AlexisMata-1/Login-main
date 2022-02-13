@@ -19,7 +19,8 @@
 
 <table>
   <tr>
-    <th>Usuario Registrado</th>
+    <th>Usuarios Registrados : {{registerDb.length}}</th>
+    <th>Correo</th>
     <th>Asistencia confirmada</th>
     <th></th>
     <th></th>
@@ -28,7 +29,8 @@
   <tr *ngFor="let user of registerDb">
    
     <th>{{user.first_name}} {{user.last_name}}</th> 
-    <th>{{user.confirmed_assist}}</th>
+    <th>{{user.email}}</th>
+    <th>{{user.confirmed_assist | mostrarConfirmedAssist}}</th>
 </tr>
 
 </table>

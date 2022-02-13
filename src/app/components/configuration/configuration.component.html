@@ -68,7 +68,7 @@
         <br>
         <!--------------------------CONFIGURACION DE USUARIOS------------------------>
         <form [formGroup]="editForm" (ngSubmit)="guardarCambios(editForm.value)">
-            <table>
+            <table >
                 <tr>
                     <th>Editar usuario</th>
                 </tr>
@@ -132,8 +132,8 @@
 
                 <th>{{user.first_name}} {{user.last_name}}</th>
                 <th>{{user.email}}</th>
-                <th>{{user.id_user_type}}</th>
-                <th>{{user.is_active}} </th>
+                <th>{{user.id_user_type | mostraUserType}}</th>
+                <th>{{user.is_active| mostrarIsActive}} </th>
 
                 <th><button (click)="editarUsuario(user)" mat-raised-button color="primary" type="submit">
                         Editar
