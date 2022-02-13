@@ -32,6 +32,9 @@ import { localStorageService } from '.././app/shared/localstorage.service'
 //IMPORTACION DE LOCALE PARA CAMBIAR AL ESPAÑOL LAS FECHAS DEL CALENDARIO
 import localePy from '@angular/common/locales/es';
 import { registerLocaleData } from '@angular/common';
+import { MostraUserTypePipe } from './mostra-user-type.pipe';
+import { MostrarIsActivePipe } from './mostrar-is-active.pipe';
+import { MostrarConfirmedAssistPipe } from './mostrar-confirmed-assist.pipe';
 registerLocaleData(localePy, 'es');
 ///////////////////////////////////////////////////////////////////////
 
@@ -44,6 +47,9 @@ registerLocaleData(localePy, 'es');
     CalendarComponent,
     ConfigurationComponent,
     ReportsComponent,
+    MostraUserTypePipe,
+    MostrarIsActivePipe,
+    MostrarConfirmedAssistPipe,
  ],
   imports: [
     BrowserModule,
