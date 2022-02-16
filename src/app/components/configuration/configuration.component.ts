@@ -102,6 +102,15 @@ export class ConfigurationComponent implements OnInit {
   }
 
 
+pintarActivo(id:boolean){
+  if(id==true){
+    return true
+  }else{
+    return false
+  }
+
+}
+
   //////////////////////////////////////////////////////////////////BOTON DE AGREGAR DOMINIO EN LA SECCION DE CORREOS ACEPTADOS
   agregarDominio() {
 
@@ -113,18 +122,14 @@ export class ConfigurationComponent implements OnInit {
       let respuesta: any = []
       respuesta = res
 
-      console.log('primer respuesta dle servidor')
-      console.log(respuesta[0])
+    
       //VALIDAMOS QUE EL SELECT NOS DEVUELVA ALGO
       if (respuesta.length > 0) {
 
-        console.log('validamos que nos regrese algo 1')
-        console.log(respuesta)
+     
         //CUANDO NOS DEVUELVA LA INFORMACION DEL DOMINIO EXISTENTE VALIDAMOS QUE ESTÉ ACTIVO O NO
         if (respuesta[0].is_active == 1) {
-          console.log('validacion de si està activo el dominio 2')
-        console.log(respuesta)
-
+      
           Swal.fire({
             icon: 'info',
             title: 'Correo activo',
@@ -133,8 +138,7 @@ export class ConfigurationComponent implements OnInit {
           this.dominioForm.reset();
 
         } else {
-          console.log('si no està activo entra al else 3')
-        console.log(respuesta)
+       
           //SI NO ESTÁ ACTIVO MANDAMOS MENSAJE DE SI DESEA ACTIVARLO NUEVAMENTE
           Swal.fire({
             title: 'Correo existente',
@@ -161,14 +165,14 @@ export class ConfigurationComponent implements OnInit {
 
               })
 
+            }else{
+              this.dominioForm.reset();
+
             }
           })
         }
         //SI LA RESPUESTA DEL SELECT ES 0, ENTONCES INSERTA EL DOMINIO EN LA BASE DE DATOS
       } else {
-
-        
-
         this.http.post(this.apiUrl + '/Domain', dominio).subscribe(res => {
           Swal.fire({
             icon: 'success',
@@ -178,12 +182,7 @@ export class ConfigurationComponent implements OnInit {
           this.dominioForm.reset();
         })
       }
-
-
     })
-
-
-
   }
 
 

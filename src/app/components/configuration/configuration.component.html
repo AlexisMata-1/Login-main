@@ -133,7 +133,8 @@
                 <th>{{user.first_name}} {{user.last_name}}</th>
                 <th>{{user.email}}</th>
                 <th>{{user.id_user_type | mostraUserType}}</th>
-                <th>{{user.is_active| mostrarIsActive}} </th>
+                <th *ngIf="user.is_active==true" style="color: green;">{{user.is_active| mostrarIsActive}} </th>
+                <th *ngIf="user.is_active==false" style="color: red;">{{user.is_active| mostrarIsActive}} </th>
 
                 <th><button (click)="editarUsuario(user)" mat-raised-button color="primary" type="submit">
                         Editar
