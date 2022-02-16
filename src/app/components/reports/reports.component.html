@@ -30,7 +30,8 @@
    
     <th>{{user.first_name}} {{user.last_name}}</th> 
     <th>{{user.email}}</th>
-    <th>{{user.confirmed_assist | mostrarConfirmedAssist}}</th>
+    <th *ngIf="user.confirmed_assist==true"><img src="../../../assets/img/check.png" alt="" width="50px" height="50px"></th>
+    <th *ngIf="user.confirmed_assist==false"><img src="../../../assets/img/un-check.png" alt="" width="50px" height="50px"></th>
 </tr>
 
 </table>

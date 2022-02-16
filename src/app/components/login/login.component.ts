@@ -51,7 +51,7 @@ loginForm:FormGroup;
 
     this.http.get(this.apiUrl + '/Domain').subscribe(res => {
       this.domains = res
-      console.log(this.domains)
+      // console.log(this.domains)
 
     })
 
@@ -98,15 +98,13 @@ loginForm:FormGroup;
                 //si encuentra una cadena de texto en el form.email igual a la variable anterior "domain" la guardará en dominio valido
                 if (form.email.indexOf(domain) > 0) {
                   dominioValido = domain
-                  console.log('este es el dominio del correo')
-                  console.log(dominioValido)
+                 
                 }
                 //el iterador recorre la longitud del arreglo donde traemos los correos validos de la base de datos
                 i++
               }
 
-              console.log('dominio encontrado')
-              console.log(dominioValido)
+            
               //si el form.email no coincide con los activos mandamos el siguiente mensaje
               if (dominioValido == null) {
 
@@ -119,7 +117,7 @@ loginForm:FormGroup;
                 this.http.post(this.apiUrl + '/Login', form).subscribe(res => {
 
                   this.localS.setLoc('usuario', JSON.stringify(res))
-                  console.log(JSON.parse(this.localS.getLoc('usuario')))
+                  // console.log(JSON.parse(this.localS.getLoc('usuario')))
 
                   this.router.navigate(['/calendar']);
                   Swal.fire({

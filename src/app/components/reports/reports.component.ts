@@ -37,10 +37,10 @@ export class ReportsComponent implements OnInit {
     let consulta = {
       date: this.consultForm.value.dia
     }
-    console.log(consulta)
+    // console.log(consulta)
 
     this.http.post(this.apiUrl+'/Register', consulta).subscribe(res => {
-      console.log(res)
+      // console.log(res)
       this.registerDb = res;
 
     });

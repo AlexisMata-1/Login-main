@@ -71,13 +71,15 @@ export class RegisterComponent implements OnInit {
     const pass2 = this.registerform.value.confirmarcontrasena
 
     // console.log(userData)
+
+    //validamos que sea mayor a 17 años
     if (yearsValid < 17) {
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
         text: 'Fecha de nacimiento fuera del rango',
       })
-
+//validamos que las contraseñas coincidan
     } else if (pass1 != pass2) {
       Swal.fire({
         icon: 'error',
@@ -87,23 +89,25 @@ export class RegisterComponent implements OnInit {
 
     }
     else {
-
+//guardamos el odminio del correo en este objeto para mandarlo al servidor como parametro
       let dominio = {
         domain: this.registerform.value.domain
       }
       // console.log('este es el dominioo')
       // console.log(dominio)
 
+//solicitamos al servidor que nos devuelva si existe el dominio ingresado en el formualrio
       this.http.post(this.apiUrl + '/Domains', dominio).subscribe(res => {
         this.respuestaDominio = res
-      
+      //si el servidor nos arroja el select desde el backend lo validamos aqui
         if (this.respuestaDominio.length != 0) {
 
-
+//si encuentra el dominio en la base de datos validarà que esté activo actualmente
           if(this.respuestaDominio[0].is_active==1){
               this.http.post(this.apiUrl + '/Users', userData).subscribe(res => {
 
             const respuesta = JSON.stringify(res)
+            //validamos que la respuesta del backend sea exitosa para decirle que inicie sesión
             if (respuesta.length > 30) {
 
               // console.log(res)
@@ -115,10 +119,16 @@ export class RegisterComponent implements OnInit {
               this.router.navigate(['/login']);
 
             } else {
-              console.log(res)
+              // console.log(res)
+              Swal.fire({
+                icon: 'error',
+                title: 'Correo existente',
+                text: 'Este correo ya está registrado',
+              })
             }
 
           })
+          //si el dominio no está activo mandará el siguiente mensaje
           }else{
             Swal.fire({
               icon: 'error',
@@ -129,6 +139,7 @@ export class RegisterComponent implements OnInit {
           }
         
         } 
+        //si no encuentra el dominio en la base de datos nos dirá que el dominio no es válido
         else {
 
           Swal.fire({
