@@ -118,9 +118,9 @@ export class CalendarComponent implements OnInit {
 
 
 
-    console.log(this.dia1)
-    console.log(this.day2)
-    console.log('------------------------------------------------------')
+    // console.log(this.dia1)
+    // console.log(this.day2)
+    // console.log('------------------------------------------------------')
     //console.log(this.isUser())
 
     ////////////////////////////CONSULTA USUARIOS DIA 1//////////////////////////////////////
