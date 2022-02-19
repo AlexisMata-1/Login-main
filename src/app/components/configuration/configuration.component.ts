@@ -172,7 +172,7 @@ export class ConfigurationComponent implements OnInit {
                 Swal.fire({
                   icon: 'success',
                   title: 'Acción exitosa',
-                  text: 'Dominio actualizado exitosamente, recargue la pagina para ver el cambio',
+                  text: 'Dominio actualizado exitosamente',
                 })
                 this.dominioForm.reset();
                 //PETICION PARA CARGAR LOS DOMINIOS ACEPTADOS A LA LISTA
