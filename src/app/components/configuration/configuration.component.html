@@ -136,7 +136,7 @@
                 <th *ngIf="user.is_active==true" style="color: green;">{{user.is_active| mostrarIsActive}} </th>
                 <th *ngIf="user.is_active==false" style="color: red;">{{user.is_active| mostrarIsActive}} </th>
 
-                <th><button (click)="editarUsuario(user)" mat-raised-button color="primary" type="submit">
+                <th><button (click)="editarUsuario(user)" [disabled]="isUser(user)" mat-raised-button color="primary" type="submit">
                         Editar
                     </button></th>
 

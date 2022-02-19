@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { FormBuilder, FormControl, FormGroup, Validators, ValidatorFn, ValidationErrors } from '@angular/forms';
 import { environment } from 'src/environments/environment';
 import Swal from 'sweetalert2';
+import { localStorageService } from 'src/app/shared/localstorage.service';
 
 /////////////////////////////////////////////////////////////////
 
@@ -65,6 +66,7 @@ export class ConfigurationComponent implements OnInit {
   ]
   constructor(private http: HttpClient,
     private fb: FormBuilder,
+    private localS: localStorageService
   ) { }
 
   ngOnInit(): void {
@@ -101,15 +103,26 @@ export class ConfigurationComponent implements OnInit {
 
   }
 
+  isUser(userList: any) {
 
-pintarActivo(id:boolean){
-  if(id==true){
-    return true
-  }else{
-    return false
+    let useractive = JSON.parse(this.localS.getLoc('usuario'));
+
+    if (userList.id_user == useractive.id_user) {
+      return true
+    } else {
+      return false
+    }
   }
 
-}
+
+  pintarActivo(id: boolean) {
+    if (id == true) {
+      return true
+    } else {
+      return false
+    }
+
+  }
 
   //////////////////////////////////////////////////////////////////BOTON DE AGREGAR DOMINIO EN LA SECCION DE CORREOS ACEPTADOS
   agregarDominio() {
@@ -122,14 +135,14 @@ pintarActivo(id:boolean){
       let respuesta: any = []
       respuesta = res
 
-    
+
       //VALIDAMOS QUE EL SELECT NOS DEVUELVA ALGO
       if (respuesta.length > 0) {
 
-     
+
         //CUANDO NOS DEVUELVA LA INFORMACION DEL DOMINIO EXISTENTE VALIDAMOS QUE ESTÉ ACTIVO O NO
         if (respuesta[0].is_active == 1) {
-      
+
           Swal.fire({
             icon: 'info',
             title: 'Correo activo',
@@ -138,7 +151,7 @@ pintarActivo(id:boolean){
           this.dominioForm.reset();
 
         } else {
-       
+
           //SI NO ESTÁ ACTIVO MANDAMOS MENSAJE DE SI DESEA ACTIVARLO NUEVAMENTE
           Swal.fire({
             title: 'Correo existente',
@@ -162,10 +175,14 @@ pintarActivo(id:boolean){
                   text: 'Dominio actualizado exitosamente, recargue la pagina para ver el cambio',
                 })
                 this.dominioForm.reset();
+                //PETICION PARA CARGAR LOS DOMINIOS ACEPTADOS A LA LISTA
+                this.http.get(this.apiUrl + '/Domain').subscribe(res1 => {
+                  this.dominiosInDb = res1;
+                })
 
               })
 
-            }else{
+            } else {
               this.dominioForm.reset();
 
             }

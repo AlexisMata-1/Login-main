@@ -39,7 +39,7 @@ export class ReportsComponent implements OnInit {
     }
     // console.log(consulta)
 
-    this.http.post(this.apiUrl+'/Register', consulta).subscribe(res => {
+    this.http.post(this.apiUrl+'/Registerr', consulta).subscribe(res => {
       // console.log(res)
       this.registerDb = res;
 

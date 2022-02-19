@@ -118,62 +118,63 @@ export class CalendarComponent implements OnInit {
 
 
 
-    //console.log(this.dia1)
-    //console.log('------------------------------------------------------')
+    console.log(this.dia1)
+    console.log(this.day2)
+    console.log('------------------------------------------------------')
     //console.log(this.isUser())
 
-    ////////////////////////////CONSULTA USUARIOS DIA1//////////////////////////////////////
+    ////////////////////////////CONSULTA USUARIOS DIA 1//////////////////////////////////////
     let consulta = {
-      date: this.dia1
+      date: this.dia0
     }
     this.http.post(this.apiUrl + '/Register', consulta).subscribe(res => {
       this.listUsuarios = res;
       //console.log(this.listUsuarios)
     });
 
-    //////////////////////////////////CONSULTA USUARIO DIA2///////////////////////////////
+    //////////////////////////////////CONSULTA USUARIO DIA 2///////////////////////////////
 
     let consulta2 = {
-      date: this.dia2
+      date: this.dia1
     }
     this.http.post(this.apiUrl + '/Register', consulta2).subscribe(res => {
       this.listUsuarios2 = res;
       //console.log(this.listUsuarios2)
     });
 
-    //////////////////////////////////CONSULTA USUARIO DIA3///////////////////////////////
+    //////////////////////////////////CONSULTA USUARIO DIA 3///////////////////////////////
 
     let consulta3 = {
-      date: this.dia3
+      date: this.dia2
     }
     this.http.post(this.apiUrl + '/Register', consulta3).subscribe(res => {
       this.listUsuarios3 = res;
       //console.log(this.listUsuarios3)
     });
-    //////////////////////////////////CONSULTA USUARIO DIA4///////////////////////////////
+    //////////////////////////////////CONSULTA USUARIO DIA 4///////////////////////////////
 
     let consulta4 = {
-      date: this.dia4
+      date: this.dia3
     }
     this.http.post(this.apiUrl + '/Register', consulta4).subscribe(res => {
       this.listUsuarios4 = res;
       //console.log(this.listUsuarios4)
     });
 
-    //////////////////////////////////CONSULTA USUARIO DIA5///////////////////////////////
+    //////////////////////////////////CONSULTA USUARIO DIA 5///////////////////////////////
 
     let consulta5 = {
-      date: this.dia5
+      date: this.dia4
     }
     this.http.post(this.apiUrl + '/Register', consulta5).subscribe(res => {
       this.listUsuarios5 = res;
       //console.log(this.listUsuarios5)
     });
 
-    //////////////////////////////////CONSULTA USUARIO DIA6///////////////////////////////
+    //////////////////////////////////CONSULTA USUARIO DIA 6///////////////////////////////
 
     let consulta6 = {
-      date: this.dia6
+      date: this.dia5
     }
     this.http.post(this.apiUrl + '/Register', consulta6).subscribe(res => {
       this.listUsuarios6 = res;
@@ -206,7 +207,7 @@ export class CalendarComponent implements OnInit {
       last_name: this.formU.last_name,
       email: this.formU.email,
       confirmed_assist: true,
-      date: this.dia1
+      date: this.dia0
     }
     this.http.post(this.apiUrl + '/Registers', form1).subscribe(res => {
       // //console.log(res)
@@ -242,7 +243,7 @@ export class CalendarComponent implements OnInit {
     const form1 = {
       id_user: this.formU.id_user,
       confirmed_assist: false,
-      date: this.dia1
+      date: this.dia0
     }
     this.http.put((this.apiUrl + '/Registers/' + this.formU.id_user), form1).subscribe(res => {
       let respuesta: any = []
@@ -278,7 +279,7 @@ export class CalendarComponent implements OnInit {
       last_name: this.formU.last_name,
       email: this.formU.email,
       confirmed_assist: true,
-      date: this.dia2
+      date: this.dia1
     }
     this.http.post(this.apiUrl + '/Registers', form1).subscribe(res => {
       let respuesta: any = []
@@ -309,7 +310,7 @@ export class CalendarComponent implements OnInit {
     const form1 = {
       id_user: this.formU.id_user,
       confirmed_assist: false,
-      date: this.dia2
+      date: this.dia1
     }
     this.http.put((this.apiUrl + '/Registers/' + this.formU.id_user), form1).subscribe(res => {
       let respuesta: any = []
@@ -345,7 +346,7 @@ export class CalendarComponent implements OnInit {
       last_name: this.formU.last_name,
       email: this.formU.email,
       confirmed_assist: true,
-      date: this.dia3
+      date: this.dia2
     }
     this.http.post(this.apiUrl + '/Registers', form1).subscribe(res => {
       let respuesta: any = []
@@ -379,7 +380,7 @@ export class CalendarComponent implements OnInit {
     const form1 = {
       id_user: this.formU.id_user,
       confirmed_assist: false,
-      date: this.dia3
+      date: this.dia2
     }
     this.http.put((this.apiUrl + '/Registers/' + this.formU.id_user), form1).subscribe(res => {
       let respuesta: any = []
@@ -415,7 +416,7 @@ export class CalendarComponent implements OnInit {
       last_name: this.formU.last_name,
       email: this.formU.email,
       confirmed_assist: true,
-      date: this.dia4
+      date: this.dia3
     }
     this.http.post(this.apiUrl + '/Registers', form1).subscribe(res => {
       let respuesta: any = []
@@ -447,7 +448,7 @@ export class CalendarComponent implements OnInit {
     const form1 = {
       id_user: this.formU.id_user,
       confirmed_assist: false,
-      date: this.dia4
+      date: this.dia3
     }
     this.http.put((this.apiUrl + '/Registers/' + this.formU.id_user), form1).subscribe(res => {
       let respuesta: any = []
@@ -483,7 +484,7 @@ export class CalendarComponent implements OnInit {
       last_name: this.formU.last_name,
       email: this.formU.email,
       confirmed_assist: true,
-      date: this.dia5
+      date: this.dia4
     }
     this.http.post(this.apiUrl + '/Registers', form1).subscribe(res => {
       let respuesta: any = []
@@ -518,7 +519,7 @@ export class CalendarComponent implements OnInit {
     const form1 = {
       id_user: this.formU.id_user,
       confirmed_assist: false,
-      date: this.dia5
+      date: this.dia4
     }
     this.http.put((this.apiUrl + '/Registers/' + this.formU.id_user), form1).subscribe(res => {
       let respuesta: any = []
@@ -554,7 +555,7 @@ export class CalendarComponent implements OnInit {
       last_name: this.formU.last_name,
       email: this.formU.email,
       confirmed_assist: true,
-      date: this.dia6
+      date: this.dia5
     }
     this.http.post(this.apiUrl + '/Registers', form1).subscribe(res => {
       let respuesta: any = []
@@ -588,7 +589,7 @@ export class CalendarComponent implements OnInit {
     const form1 = {
       id_user: this.formU.id_user,
       confirmed_assist: false,
-      date: this.dia6
+      date: this.dia5
     }
     this.http.put((this.apiUrl + '/Registers/' + this.formU.id_user), form1).subscribe(res => {
       let respuesta: any = []
